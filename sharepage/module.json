@@ -1,0 +1,111 @@
+{
+	"user" : {
+		"template" : "CRUD",
+		"outdir" : "../sys",
+		"sysmodule" : true,
+		"options" : {
+			"module_desc" : "用户管理",
+			"url" : "/sys/user"
+		}
+	},
+
+	"role" : {
+		"template" : "CRUD",
+		"comment" : "管理角色，以及没个角色对不同模块的权限设置",
+		"outdir" : "../sys",
+		"sysmodule" : true,
+		"options" : {
+			"module_desc" : "角色管理",
+			"url" : "/sys/role"
+		}
+	},
+
+	"enum" : {
+		"template" : "CRUD",
+		"comment" : "数据字典管理，设置系统中用到的各种枚举类型",
+		"outdir" : "../sys",
+		"sysmodule" : true,
+		"options" : {
+			"module_desc" : "数据字典管理",
+			"url" : "/sys/enum",
+			"supportnavi" : true,
+			"supportbatchdelete" : true,
+			"supportimport" : true,
+			"supportexport" : true
+		}
+	},
+
+	"member" : {
+		"template" : "CRUD",
+		"comment" : "会员信息管理模块",
+		"outdir" : "../modules/member",
+		"sysmodule" : false,
+		"options" : {
+			"module_desc" : "会员管理",
+			"url" : "/member",
+			"supportexport" : false
+		}
+	},
+
+	"member_follow" : {
+		"template" : "CRUD",
+		"comment" : "会员之间的意中人关系",
+		"outdir" : "../modules/memberfollow",
+		"sysmodule" : false,
+		"options" : {
+			"module_desc" : "意中人关系",
+			"url" : "/memberfollow",
+			"supportexport" : false
+		}
+	},
+
+	"member_log" : {
+		"template" : "CRUD",
+		"comment" : "会员操作日志（登陆，查看）",
+		"outdir" : "../modules/memberlog",
+		"sysmodule" : false,
+		"options" : {
+			"module_desc" : "会员操作日志",
+			"url" : "/memberlog",
+			"supportexport" : false
+		}
+	},
+
+
+	"member_charge" : {
+		"template" : "CRUD",
+		"comment" : "会员消费记录",
+		"outdir" : "../modules/membercharge",
+		"sysmodule" : false,
+		"options" : {
+			"module_desc" : "会员消费记录",
+			"url" : "/membercharge",
+			"supportexport" : false
+		}	
+	},
+
+
+	"feather_record" : {
+		"template" : "CRUD",
+		"comment" : "羽毛使用记录",
+		"outdir" : "../modules/featherrecord",
+		"sysmodule" : false,
+		"options" : {
+			"module_desc" : "羽毛使用记录",
+			"url" : "/featherrecord",
+			"supportexport" : false
+		}	
+	},
+
+	"message" : {
+		"template" : "CRUD",
+		"comment" : "站内信",
+		"outdir" : "../modules/message",
+		"sysmodule" : false,
+		"options" : {
+			"module_desc" : "站内信",
+			"url" : "/message",
+			"supportexport" : false
+		}	
+	}
+}
