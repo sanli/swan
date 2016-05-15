@@ -49,7 +49,8 @@ var member = new Schema({
 
     // 个人信息
     相册 : [String],
-    我要寻找 : String,
+    每月花费 : String,
+    我要寻找 : [String],
     我能提供 : String,
     希望得到 : String,
     爱情观念 : [String],
@@ -59,29 +60,37 @@ var member = new Schema({
     自我介绍 : String,
     期望情人 : String,
 
+    // other info
+    交友宣言 : String,
+
     // ------------------ 联系资料 -------------
     手机 : String,
     微信 : String,
     其他 : String,
 
     // ------------------ 系统相关信息 -------------
-    手机认证 : Boolean,
-    邮箱认证 : Boolean,
-    QQ认证 : Boolean,
-    被浏览次数 : Number,
+    // 未认证 ／ 已发送 ／ 已验证
+    手机认证状态 : { type : String, default : "未认证" },
+    邮箱认证状态 : { type : String, default : "未认证" },
+    QQ认证状态 : { type : String, default : "未认证" },
+    视频认证状态 : { type : String, default : "未认证" },
+    被浏览次数 : { type : Number, default : 0 },
     最后IP : String,
+    // 单位是分钟
+    在线时长 : { type : Number, default : 0 },
+    最后签到时间 : Date,
 
     // ------------------ 服务卡通相关信息 -------------
-    羽毛数量 : Number,
-    会员级别 : String,
-    置顶 : Boolean,
-
+    羽毛数量 : { type : Number, default : 20 },
+    会员级别 : { type : String, default : '普通会员' },
+    置顶 : { type : Boolean, default : false },
+    被浏览量 : { type : Number, default : 0 },
 
     // ------------------ 通用数据 ----------------
     // 创建修改时间
-    ctime : Date,
+    ctime : { type : Date, default :  Date.now },
     // 最后修改时间
-    utime : Date,
+    utime : { type : Date, default :  Date.now },
 },  { collection: 'member' });
 
 // 创建索引，以及设置唯一键
@@ -107,6 +116,7 @@ exports.create = function(data, fn){
     module.ctime = new Date();
     module.utime = new Date();
 
+
     _Module.create(module, function(err, newModule){
       if(err) return fn(err);
       fn(err, newModule);
@@ -116,7 +126,7 @@ exports.create = function(data, fn){
 // 更新对象
 exports.update = function(_id, data, fn){
     data.utime = new Date();
-    _Module.findByIdAndUpdate(_id, {$set: data}, {new : false}, fn);
+    _Module.findByIdAndUpdate(_id, {$set: data}, {new : true}, fn);
 };
 
 //删除对象
@@ -179,12 +189,18 @@ var isme = require('../../sharepage.js').isme;
 var tester = {
   testfn: function(){
     //TODO : 执行测试代码
+  },
+
+  test_hash : function(){
+    var targets = ['password', 'This is log password', '中文也行？'];
+    targets.forEach( pass=> console.log( pass + " => "+ share.hashpass(pass)));
   }
+
 }
 
 if(isme(__filename)){
   if(process.argv.length > 2 && isme(__filename)){
-    testfn = process.argv[2];
+    var testfn = process.argv[2];
     console.log("run test:%s", testfn);
 
     if(tester[testfn]){
@@ -192,7 +208,7 @@ if(isme(__filename)){
     }
   }else{
     var testcmd = [];
-    for(cmd in tester)
+    for(var cmd in tester)
       testcmd.push(cmd);
 
     console.log('memberdb.js '+ testcmd.join('|'));

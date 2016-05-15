@@ -75,6 +75,7 @@ require('./routes/index.js').bindurl(app);
 // 注册系统基础管理模块
 app.use(express.static(path.join(__dirname, 'sys/public')));
 var x = app.get('views');
+// 系统管理页面模版文件
 x.push( __dirname + '/sys/view');
 app.set('views', x);
 require('./sys/modulectl.js').bindurl(app);

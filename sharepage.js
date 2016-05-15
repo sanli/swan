@@ -190,26 +190,32 @@ var getParam = function(msg, req, res, params){
 exports.getParam = getParam;
 
 // ====================== 模块功能函数 ========================
-function restrict(req, res, next) {
-	console.log("req.session.user:" +  req.session.user);
-	if (req.session.user) {
-		next();
-	}else{
-      	req.session.error = '没有登录，限制访问！';
-      	res.redirect('/signin.html');  
+function _restrict(field){
+	return function(req, res, next) {
+		if (req.session[field]) {
+			next();
+		}else{
+	      	req.session.error = '没有登录，限制访问！';
+	      	res.redirect('/signin.html');  
+		}
 	}
 }
-exports.restrict = restrict;
+var restrict = _restrict('user');
+var memberRestrict = _restrict('member');
 
-function apiRestrict(req, res, next){
-	if (req.session.user) {
-		next();
-	} else {
-		req.session.error = '没有登录，限制访问！';
-    	rt(false,'没有登录，限制访问！', res);
+
+function _apiRestrict(field){
+	return function(req, res, next){
+		if (req.session[field]) {
+			next();
+		} else {
+			req.session.error = '没有登录，限制访问！';
+	    	rt(false,'没有登录，限制访问！', res);
+		}
 	}
 }
-exports.apiRestrict = apiRestrict;
+var apiRestrict = _apiRestrict('user');
+var memberApiRestrict = _apiRestrict('member');
 
 // 检查用户是否有权限访问这个URL
 function checkRight(req, res, next){
@@ -219,7 +225,9 @@ function checkRight(req, res, next){
 /*
  * 创建一个URL的映射, 
  * opt.method : 访问类型，取值：'get', 'post', 'all' , default is 'all'
- * opt.needAuth : 是否需要登录才能访问这个URL, 取值：true, false, default is true
+ * opt.needAuth : 是否需要登录(user)才能访问这个URL, 取值：true, false, default is true
+ * opt.needMember : 是否需要是会员（member）才能访问这个URL, 取值：true, false, default is false
+ *       如过设置了needMember为true，则needAuth自动设置为false
  * opt.outType : 访问类型，是输出页面内容，还是一个JSON API，'page', 'api' , default is 'page' 
  */
 function bindurl(app, url, opt, fn){
@@ -228,9 +236,13 @@ function bindurl(app, url, opt, fn){
     }
     opt = extend({  method : 'all',
                     needAuth : true,
+                    needMember : false, // 是否需要是注册会员
                     outType : 'api' } , opt);
 
-  	if(opt.needAuth){
+    if(opt.needMember){
+	  	var restrictfn = (opt.outType === 'api' ? memberApiRestrict : memberRestrict );
+	    app[opt.method](url, restrictfn, checkRight, fn);	
+  	}if(opt.needAuth){
 	  	var restrictfn = (opt.outType === 'api' ? apiRestrict : restrict );
 	    app[opt.method](url, restrictfn, checkRight, fn);	
   	}else{
@@ -718,34 +730,6 @@ exports.flatten = flatten;
 
 // <<<<<<< 对象操作常用函数结束
 
-//多个动作执行(主要删除与更新)
-//actlist  { db : db, desc : "宏站规划库",cond:cond,act:'remove',set:'' }
-var async = require('async');
-function batchAct(actlist,fn){
-      async.eachSeries(actlist, function( actdata , callback ){
-      	  if(actdata.act==="remove"){
-	          actdata.db.remove(actdata.cond,function(err,doc) {
-	            if(doc>0)
-	              console.log('删除'+ actdata.desc + "信息");
-	             callback(err,doc);
-	          }); 
-      	  }
-      	  else if(actdata.act==="update"){
-      	  	  actdata.db.update(actdata.cond,actdata.set,actdata.opt,function(err,doc) {
-	            if(doc>0)
-	              console.log('更新'+ actdata.desc + "信息");
-	            callback(err,doc);
-	          }); 
-      	  }
-      }, function(err){
-        if(err){
-          return fn(err);
-        }
-        fn(err);
-      });
-}
-exports.batchAct = batchAct;
-
 var http = require('http'), 
     querystring = require('querystring');
 // 发送get查询，返回一个JSON对象
@@ -844,4 +828,19 @@ exports.downloadfile = function(url, filename, fn){
 	    });		
 	});
 }
+
+
+//===============================
+// 密码Hash函数
+// http://lollyrock.com/articles/nodejs-sha512/
+// ==============================
+var crypto = require('crypto');
+var hash = crypto.createHmac('sha512', 'share_page_will_make_your_life_a_little_easier');
+function hashpass(text){
+	const crypto = require('crypto');
+	const hash = crypto.createHash('sha256');
+
+	return hash.update(text).digest('base64');
+};
+exports.hashpass = hashpass;
 

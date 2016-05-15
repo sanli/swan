@@ -244,6 +244,7 @@ _.each( fieldset, function(field){
 <@ }); @>
 </script>
 
+
 <!-- 拼装查询页面字段列表模版 -->
 <script type="text/html" id="formFieldSetMacro">
 <@ 
@@ -278,8 +279,7 @@ _.each( fieldset, function(field){
         <label class="col-sm-<@=wlabel @> control-label"><@=field.label @><@=required ? "*" : '' @></label>
         <div class="col-sm-<@=winput @>">
           <@ if(type === 'input'){ @>
-            <input type="text" name="<@=field.name @>" 
-                  class="form-control" <@=field.placeholder ? "placeholder=\"" + field.placeholder + "\"" : ''  @> 
+            <input type="text" name="<@=field.name @>" class="form-control" 
                   <@=required? 'required' : "" @> 
                   <@=readonly? 'readonly data-sharepage-readonly="true"' : "" @>>
                   
@@ -301,7 +301,7 @@ _.each( fieldset, function(field){
             <a name="<@=field.name @>" href="<@=field.href @>" target="<@=field.target @>" class="btn btn-info"><@=field.value @></a>
 
           <@ } else if(type === 'text'){ @>
-            <textarea name="<@=field.name @>" class="form-control" style="height: 200px;" <@=field.placeholder ? "placeholder=\"" + field.placeholder + "\"" : ''  @> 
+            <textarea name="<@=field.name @>" class="form-control" style="height: 80px;"
                   <@=required? 'required' : "" @> 
                   <@=readonly? 'readonly data-sharepage-readonly="true"' : "" @>></textarea>
 
@@ -334,13 +334,27 @@ _.each( fieldset, function(field){
                   <@=field.readonly? 'readonly data-sharepage-readonly="true"' : "" @>
                   <@=field.disabled ? 'disabled' : "" @>>
               <@= field.allowEmpty ?  "<option>不选择</option>" : "" @>
-              <@ _.each( field.enums, function(dict){ @>
+              <@ 
+              _.each( field.enums, function(dict){ 
+              @>
                 <option value=<@=dict.value  @>><@=dict.label  @></option>
               <@ }) @>
             </select>
 
+          <@ } else if(type === 'radio'){ @>
+              <@ 
+              _.each( field.enums, function(dict){ 
+              @>
+                <label class="radio-inline">
+                  <input type="radio" name="<@=field.name @>" value="<@=dict.value  @>" 
+                  <@=field.required? 'required' : "" @> 
+                  <@=field.readonly? 'readonly data-sharepage-readonly="true"' : "" @>
+                  <@=field.disabled ? 'disabled' : "" @> > 
+                  <@=dict.label  @>
+                </label>
+              <@ }) @>
           <@ } else if(type === 'multiselect'){ @>
-            <div name="<@=field.name @>" class="well" 
+            <div name="<@=field.name @>"
                   <@=field.required? 'required' : "" @> >
               <@ _.each( field.enums, function(dict){ @>
                 <label class="checkbox-inline">
@@ -373,44 +387,12 @@ _.each( fieldset, function(field){
 </script>
 
 <!-- 拼装查询页面字段列表模版 -->
-<script type="text/html" id="icon-select">
-  <div name="<@=field.name @>" class="input-group" data-sharepage-control='<@=field.prototype @>'>
-    <div class="input-group-btn">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">选择 <span class="caret"></span></button>
-      <ul class="dropdown-menu"></ul>
-    </div>
-    <span class="glyphicon form-control"></span>
-  </div>
-</script>
-
-<!-- 模块选择列表 -->
-<script type="text/html" id="module-select">
-  <div name="<@=field.name @>" class="input-group" data-sharepage-control='<@=field.prototype @>'>
-    <div class="input-group-btn">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">选择 <span class="caret"></span></button>
-      <ul class="dropdown-menu">
-        <li data-option="root"><a href="#">顶层模块</a></li>
-        <%
-        var moduleTree = commons.getModuleTree();
-        moduleTree.forEach(function(module){
-          if(!module.active) return;
-        %>
-          <li data-option="<%=module.module_id %>"><a><%=module.module_name %></a></li>
-        <% }); %>
-      </ul>
-    </div>
-    <input type="text" class="form-control" <@=field.required? 'required' : "" @> <@=field.readonly? 'readonly' : "" @>>
-  </div>
-</script>
-
-<!-- 拼装查询页面字段列表模版 -->
 <script type="text/html" id="formViewFieldSetMacro">
 <@ 
 _.each( fieldset, function(field){ 
     // 计算field的宽度
     var wcol = 12 / (field.col || 1),
-        wlabel = wcol > 6 ? 2 : 4,
-        winput = wcol > 6 ? 10 : 8;
+        wlabel = 4, winput = 8;
     var type = field.type || 'input';
 @>
   <@ 
@@ -424,21 +406,21 @@ _.each( fieldset, function(field){
     </div>
   <@ } else { @>
     <div class="form-group col-md-<@=wcol @>">
-        <label class="col-sm-<@=wlabel @> control-label"><@=field.label @></label>
+        <label class="col-sm-<@=wlabel @>"><@=field.label @>: </label>
         <div class="col-sm-<@=winput @>">
 
         <@  if(type === 'html'){ @>
           <div name="<@=field.name @>" class="col-sm-12 well" data-type="html"></div>
 
         <@ } else if(type === 'select'){ @>
-            <select name="<@=field.name @>" class="form-control" readonly disabled>
+            <select name="<@=field.name @>" readonly disabled>
               <option></option>
               <@ _.each( field.enums, function(dict){ @>
                 <option value=<@=dict.value  @>><@=dict.label  @></option>
               <@ }) @>
             </select>
         <@ } else { @>
-          <span name="<@=field.name @>" class="form-control col-sm-6"></span>
+          <span name="<@=field.name @>"></span>
         <@ } @>
         </div>
     </div>

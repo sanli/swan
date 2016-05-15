@@ -269,7 +269,8 @@ var $P = function(options) {
   // 消息框的全全局配置
   Messenger.options = {
       extraClasses: 'messenger-fixed messenger-on-top',
-      theme: 'future',
+      //theme: 'future',
+      theme: 'air',
   };
 
   $.extend({

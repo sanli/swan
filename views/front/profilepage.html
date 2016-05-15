@@ -1,0 +1,460 @@
+<% include ./inc/f_head.html %>
+<% opt.navi_solide = true %>
+<% include ./inc/f_navi.html %>
+
+
+	<div class="container">
+		<div class="col-md-12">
+<!-- ==============================================
+                Single Product Page
+================================================= -->
+
+<section id="singleProduct" class="section single-product">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-0 col-sm-8 col-sm-offset-2 product-sidebar">
+            	<div class="profile" style="background-image: url(assets/images/team/chairpersons_4.jpg)">
+            		<%if(member.会员级别 === !'普通会员' ){%>
+            			<span class="badge base-bg"><%=member.会员级别 %></span>
+            		<%}%>
+            		<a id="upload-pic-btn" class="label label-success pull-right">上传头像</a>
+                </div>
+            </div>
+
+            <div class="col-md-8 col-sm-12">
+                <div class="about-product">
+                    <header>
+                        <h5 class="product-name"><%=member.昵称 %> 
+                        <%if(member.性别 === '男'){%>
+                        	<span class="ion-male" title="男性"></span>
+                        <%}else{%>
+                        	<span class="ion-female" title="女性"></span>
+                        <%}%>
+
+                        <% if(member.QQ){ %> <span class="fa fa-qq"></span> <% } %>
+                        <% if(member.邮箱){ %> <span class="ion-email"></span> <% } %>
+                        <% if(member.电话){ %> <span class="ion-iphone"></span> <% } %>
+                        </h5>
+                        <table class="table table-striped"  style="font-size: 9px;">
+                            	<tr>
+                            		<td>诚信值:</td><td><%='计算中' %></td>
+                            		<td>注册日期:</td><td><%= commons.formatdate( member.ctime ) %></td>
+                            		<td>被浏览量:</td><td><%= member.被浏览量 %></td>
+                            		<td>最近回访:</td><td><%= commons.formatdate( session.lastModified ) %></td>
+                            	</tr>
+                       	</table>
+                    </header>
+                    <div class="row">
+                    	<div class="col-md-6"><p>年龄: <%= commons.calcage(member.出生年) %></p></div>
+                    	<div class="col-md-6"><p>居住地: <%= [ member.所在省, member.所在市, member.所在区].join('') %></p></div>
+                    	<div class="col-md-12"><p>会员: 白银VIP <a id="upgrade-btn" class="label label-success">升级</a></p></div>
+	                    <div class="col-md-12"><p>羽毛: 12 <a id="upgrade-btn" class="label label-success">充值</a> <a id="upgrade-btn" class="label label-danger">邀请送羽毛</a></p></div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+				  <div class="panel-heading">交友宣言 
+				  	<a id="friendDeclareBtn" class="label label-success pull-right"><span class="icon-edit"></span> 编辑</a>
+				  </div>
+				  <div id="friendDeclareDiv" class="panel-body">
+				  	<% if(member.交友宣言){ %>
+				    	<%= member.交友宣言 %>
+				    <% } else { %>
+				    	还没填写交友宣言，快编辑宣言吧...
+				    <% } %>
+				  </div>
+				</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+            	<div class="panel panel-default">
+				  <div class="panel-heading">真我相册 <a href="" class="pull-right "><span class="icon-edit"></span> 编辑</a></div>
+				  <div class="panel-body">
+				    
+				  </div>
+				</div>
+
+				<div class="info-widget">
+			      <ul class="nav nav-tabs" id="buildingNavtab">
+		              <li class="active"><a href="#b1" data-toggle="tab">基本会员管理信息</a></li>
+		              <li class="pull-right">
+		              	<a id="baseinfoBtn" href="#" ><span class="icon-edit"></span> 编辑</a>
+		              </li>
+		          </ul>
+		          <div style="padding: 10px;">
+		            <form id="member-baseinfo-form-ro" class="form-horizontal" role="form">
+		              	<fieldset data-sharepage-macro="formViewFieldSetMacro">
+			              { /* 只读字段 */
+			                fieldset :[
+			                  { name : '性别' , label: '性别' }, 
+			                  { name : '身高' , label: '身高' }, 
+			                  { name : '出生年月' , label: '出生年月' }, 
+			                  { name : '最高学历' , label: '最高学历' }, 
+			                  { name : '婚姻状况' , label: '婚姻状况' }, 
+			                  { name : '从事职业' , label: '从事职业' }, 
+			                  { name : '年收入' , label: '年收入' }, 
+			                ]
+			              }
+			            </fieldset>
+		            </form>
+		          </div>
+		        </div>
+
+		        <div class="honey-widget">
+			      <ul class="nav nav-tabs" id="buildingNavtab">
+		              <li class="active"><a href="#b1" data-toggle="tab">交友蜜语</a></li>
+		              <li class="pull-right">
+		              	<a id="honeyBtn" href="#" ><span class="icon-edit"></span> 编辑</a>
+		              </li>
+		          </ul>
+		          <div style="padding: 10px;">
+		            <form id="member-honey-form-ro" class="form-horizontal" role="form">
+		              	<fieldset data-sharepage-macro="formViewFieldSetMacro">
+			              { /* 只读字段 */
+			                fieldset :[
+			                  { name : '每月花费' , label: '每月花费', type : "select",
+	                        	enums : <%- commons.getEnumListJSON("每月花费") %>  }, 
+			                  { name : '我要寻找' , label: '我要寻找' }, 
+			                  { name : '我能提供' , label: '我能提供' }, 
+			                  { name : '希望得到' , label: '希望得到' }, 
+			                  { name : '爱情观念' , label: '爱情观念' }, 
+			                  { name : '外貌' , label: '外貌' }, 
+			                  { name : '个性' , label: '个性' }, 
+			                  { name : '兴趣爱好' , label: '兴趣爱好' }, 
+			                  { name : '自我介绍' , label: '自我介绍' }, 
+			                  { name : '期望情人' , label: '期望情人' }, 
+			                ]
+			              }
+			            </fieldset>
+		            </form>
+		          </div>
+		        </div>
+
+		        <div class="contact-widget">
+			      <ul class="nav nav-tabs" id="buildingNavtab">
+		              <li class="active"><a href="#b1" data-toggle="tab">联系资料</a></li>
+		              <li class="pull-right">
+		              	<a id="editContactBtn" href="#" ><span class="icon-edit"></span> 编辑</a>
+		              </li>
+		          </ul>
+		          <div style="padding: 10px;">
+		            <form id="member-contact-form-ro" class="form-horizontal" role="form">
+		              	<fieldset data-sharepage-macro="formViewFieldSetMacro">
+			              { /* 只读字段 */
+			                fieldset :[
+			                  { name : '邮箱' , label: '邮箱' }, 
+			                  { name : 'QQ' , label: 'QQ' }, 
+			                  { name : '手机' , label: '手机' }, 
+			                  { name : '微信' , label: '微信' }, 
+			                  { name : '其他' , label: '其他' }, 
+			                ]
+			              }
+			            </fieldset>
+		            </form>
+		          </div>
+		        </div>
+            </div>
+
+            <!-- ==============================================
+							shop Sidebar
+			================================================ -->
+
+			<div class="sidebar col-md-4">
+
+			    <div class="offer-widget">
+			        <p>在线时长：(...)分钟 <a href="#" class="pull-right">兑换</a></p>
+			        <a href="#" class="btn btn-cal-default">每日签到送羽毛</a>
+			    </div>
+
+			    <div class="widget catagory-widget">
+					<h5>热门增值服务</h5>
+					<ul>
+			            <li>
+			                <a href="#" title="手机号认真免费试用3天">意中人上线提醒 <span class="badge pull-right">购买</span></a>
+			            </li>
+
+			            <li>
+			                <a href="#" title="">自动接受邀请 <span class="badge pull-right">购买</span></a>
+			            </li>
+
+			            <li>
+			                <a href="#" title="">推送本人资料给新注册用户 <span class="badge pull-right">购买</span></a>
+			            </li>
+
+			            <li>
+			                <a href="#" title="">多城一家服务 <span class="badge pull-right">购买</span></a>
+			            </li>
+
+			            <li>
+			                <a href="#" title="">账户本地置顶服务 <span class="badge pull-right">购买</span></a>
+			            </li>
+
+			            <li>
+			                <a href="#" title="">黄金会员私人服务 <span class="badge pull-right">购买</span></a>
+			            </li>
+			        </ul>
+				</div>
+
+
+				<div class="counter-widget">
+			        <div class="row">
+			            <!-- Fact Item -->
+			            <div class="col-sm-4">
+			                <div class="fact">
+			                	<p class="fact-text">我中意的</p>
+			                    <h5 class="fact-number">30</h5>
+			                </div>
+			            </div>
+			            <!--/ End Fact Item -->
+			            <div class="col-sm-4">
+			                <div class="fact">
+			                    <p class="fact-text">中意我的</p>
+			                    <h5 class="fact-number">50</h5>
+			                </div>
+			            </div>
+			            <!--/ End Fact Item -->
+			            <div class="col-sm-4">
+			                <div class="fact">
+			                    <p class="fact-text">最近访客</p>
+			                    <h5 class="fact-number">30</h5>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+
+			    <div class="list-group">
+				  <a href="#" class="list-group-item">
+				    <span class="icon-megaphone"></span> 网站通知 <span class="badge">4</span>
+				  </a>
+				  <a href="#" class="list-group-item">
+				  	<span class="icon-envelope"></span> 意中人来信
+				  </a>
+				  <a href="#" class="list-group-item">
+				  	<span class="icon-pencil"></span> 写信给意中人
+				  </a>
+				  <a href="#" class="list-group-item">
+				  	<span class="icon-lightbulb"></span> 谁看过我
+				  </a>
+				  <a href="#" class="list-group-item">
+				  	<span class="icon-linegraph"></span> 我看过谁
+				  </a>
+				</div>
+
+				<div class="widget catagory-widget">
+					<h5>诚信值</h5>
+					<ul>
+			            <li>
+			                <a href="#" title="">上传头像 ＋5 <span class="badge pull-right">去认证</span></a>
+			            </li>
+
+			            <li>
+			                <a href="#" title="View all posts from Catagory2">邮箱认证 +5 <span class="badge pull-right">去认证</span></a>
+			            </li>
+
+			            <li>
+			                <a href="#" title="View all posts from Catagory3">QQ认证 +5 <span class="badge pull-right">去认证</span></a>
+			            </li>
+
+			            <li>
+			                <a href="#" title="View all posts from Catagory4">手机认证 +5 <span class="badge pull-right">去认证</span></a>
+			            </li>
+			        </ul>
+				</div>
+			</div>
+        </div>
+</section>
+
+		</div>
+	</div>
+<% include ./inc/f_footnavi.html%>
+
+<!-- Offcanvas Elements
+============================================= -->
+
+<!-- 交友宣言修改对话框 -->
+<div id="friendDeclareDlg" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+	    <div class="modal-header">
+	      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	      <h5 class="header-text">交友宣言</h5>
+	    </div>
+	    <div class="modal-body">
+	      <div style="padding: 10px;">
+	      <form id="friendDeclare-form" class="form-horizontal" role="form">
+	        <div class="tab-content">
+	          <div role="tabpanel" class="tab-pane active" id="b1">
+	            <fieldset data-sharepage-macro="formFieldSetMacro">
+	              { /* 查询字段 */
+	                fieldset :[
+	                  { name : '交友宣言' , label: '交友宣言', type: 'text', required: true }
+	                ]
+	              }
+	            </fieldset>
+	          </div>
+	        </div>
+	      </form>
+	      </div>
+	    </div>
+	    <div class="modal-footer">
+	      <button class="btn cancle" data-dismiss="modal" aria-hidden="true">取消</button>
+	      <button id="saveBtn" class="btn btn-primary" data-doing-text="正在保存...">确定</button>
+	    </div>
+	  </div>
+	</div>
+</div> <!-- 交友宣言修改对话框 -->
+
+<!-- 交友宣言修改对话框 -->
+<div id="member-baseinfo-dlg" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	  <div class="modal-content">
+	    <div class="modal-header">
+	      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	      <h5 class="header-text">会员基本信息</h5>
+	    </div>
+	    <div class="modal-body">
+	      <div style="padding: 10px;">
+	      <form id="member-baseinfo-form" class="form-horizontal" role="form">
+          	<fieldset data-sharepage-macro="formFieldSetMacro">
+              { /* 只读字段 */
+                fieldset :[
+                  { name : '性别' , label: '性别', type : 'radio' , 
+                        enums : <%- commons.getEnumListJSON("性别") %> }, 
+                  { name : '身高' , label: '身高', type : 'select' , 
+                        enums : <%- commons.getEnumListJSON("身高") %> }, 
+                  { name : '出生年' , label: '出生年', type : 'select' , 
+                        enums : <%- commons.getEnumListJSON("出生年") %>, col : 2  }, 
+                  { name : '出生月' , label: '出生月', type : 'select' , 
+                        enums : <%- commons.getEnumListJSON("出生月") %>, col : 2    }, 
+                  { name : '最高学历' , label: '最高学历', type : 'select' , 
+                        enums : <%- commons.getEnumListJSON("学历") %>  }, 
+                  { name : '婚姻状况' , label: '婚姻状况', type : 'select' , 
+                        enums : <%- commons.getEnumListJSON("婚姻状况") %>  }, 
+                  { name : '从事职业' , label: '从事职业', type : 'select' , 
+                        enums : <%- commons.getEnumListJSON("职业") %>  }, 
+                  { name : '年收入' , label: '年收入', type : 'select' , 
+                        enums : <%- commons.getEnumListJSON("年收入") %>  }, 
+                ]
+              }
+            </fieldset>
+        </form>
+	      </div>
+	    </div>
+	    <div class="modal-footer">
+	      <button class="btn cancle" data-dismiss="modal" aria-hidden="true">取消</button>
+	      <button id="saveBtn" class="btn btn-primary" data-doing-text="正在保存...">确定</button>
+	    </div>
+	  </div>
+	</div>
+</div> <!-- 交友宣言修改对话框 -->
+
+
+<!-- 交友宣言修改对话框 -->
+<div id="member-honey-dlg" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+	  <div class="modal-content">
+	    <div class="modal-header">
+	      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	      <h5 class="header-text">交友蜜语</h5>
+	    </div>
+	    <div class="modal-body">
+	      <div style="padding: 10px;">
+		      <form id="member-honey-form" class="form-horizontal" role="form">
+		      	<fieldset data-sharepage-macro="formFieldSetMacro">
+		          { /* 只读字段 */
+		            fieldset :[
+		              { name : '每月花费' , label: '每月花费', type : 'select' , 
+	                        enums : <%- commons.getEnumListJSON("每月花费") %> }, 
+		              { name : '我要寻找' , label: '我要寻找', type : 'multiselect' , 
+		              		enums : <%- commons.getEnumListJSON("我要寻找") %> }, 
+		              { name : '我能提供' , label: '我能提供', type : 'radio' , 
+                        enums : <%- commons.getEnumListJSON("我能提供") %> }, 
+		              { name : '希望得到' , label: '希望得到', type : 'radio' , 
+                        enums : <%- commons.getEnumListJSON("我能提供") %> }, 
+		              { name : '爱情观念' , label: '爱情观念', type : 'multiselect' , 
+		              		enums : <%- commons.getEnumListJSON("爱情观念") %> }, 
+		              { name : '外貌' , label: '外貌', type : 'multiselect' , 
+		              		enums : <%- commons.getEnumListJSON("外型") %> }, 
+		              { name : '个性' , label: '个性', type : 'multiselect' , 
+		              		enums : <%- commons.getEnumListJSON("个性") %> }, 
+		              { name : '兴趣爱好' , label: '兴趣爱好', type : 'multiselect' , 
+		              		enums : <%- commons.getEnumListJSON("兴趣爱好") %>  }, 
+		              { name : '自我介绍' , label: '自我介绍', type: 'text' }, 
+		              { name : '期望情人' , label: '期望情人', type: 'text' }, 
+		            ]
+		          }
+		        </fieldset>
+		    </form>
+	      </div>
+	    </div>
+	    <div class="modal-footer">
+	      <button class="btn cancle" data-dismiss="modal" aria-hidden="true">取消</button>
+	      <button id="saveBtn" class="btn btn-primary" data-doing-text="正在保存...">确定</button>
+	    </div>
+	  </div>
+	</div>
+</div> <!-- 交友宣言修改对话框 -->
+
+
+<!-- 交友宣言修改对话框 -->
+<div id="member-contact-dlg" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+	  <div class="modal-content">
+	    <div class="modal-header">
+	      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	      <h5 class="header-text">联系资料</h5>
+	    </div>
+	    <div class="modal-body">
+	      <div style="padding: 10px;">
+		      <form id="member-contact-form" class="form-horizontal" role="form">
+		      	<fieldset data-sharepage-macro="formFieldSetMacro">
+		          <form id="member-contact-form" class="form-horizontal" role="form">
+		              	<fieldset data-sharepage-macro="formViewFieldSetMacro">
+			              { /* 只读字段 */
+			                fieldset :[
+			                  { name : '邮箱' , label: '邮箱', }, 
+			                  { name : 'QQ' , label: 'QQ' }, 
+			                  { name : '手机' , label: '手机' }, 
+			                  { name : '微信' , label: '微信' }, 
+			                  { name : '其他' , label: '其他' }, 
+			                ]
+			              }
+			            </fieldset>
+		            </form>
+		        </fieldset>
+		    </form>
+	      </div>
+	    </div>
+	    <div class="modal-footer">
+	      <button class="btn cancle" data-dismiss="modal" aria-hidden="true">取消</button>
+	      <button id="saveBtn" class="btn btn-primary" data-doing-text="正在保存...">确定</button>
+	    </div>
+	  </div>
+	</div>
+</div> <!-- 交友宣言修改对话框 -->
+
+
+
+<!-- 通用的页面元素和模版 
+============================================= -->
+<% include ./inc/f_sharepage.html %>
+
+<!-- Javascripts
+============================================= -->
+<script src="assets/lib/components-modernizr/modernizr.js"></script>
+<script src="assets/lib/jquery/dist/jquery.js"></script>
+<script src="assets/lib/bootstrap/dist/js/bootstrap.js"></script>
+<script src="assets/lib/imagesloaded/imagesloaded.pkgd.min.js"></script>
+<script src="assets/lib/animsition/dist/js/animsition.min.js"></script>
+<script src="assets/lib/magnific-popup/dist/jquery.magnific-popup.js"></script>
+<script src="assets/lib/owlcarousel/owl-carousel/owl.carousel.js"></script>
+<script src="assets/js/plugins.js"></script>
+<script src="assets/js/main.js"></script>
+
+<script src="/js/sharepage.base.js"></script>
+<script src="/js/sharepage.js"></script>
+<script src="/js/sharepage.ext.js"></script>
+<script src="/js/commons.js"></script>
+<script src="/js/front/profile.js"></script>
+
+<% include ./inc/f_foot.html %>

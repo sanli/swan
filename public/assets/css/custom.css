@@ -1,0 +1,66 @@
+.panel {
+  border-radius: 0px; }
+
+.form-group label {
+  text-align: right; }
+
+.sigin .section-content {
+  pointer-events: none; }
+  .sigin .section-content .sigin-box {
+    pointer-events: auto; }
+
+.sigin-box {
+  background-color: rgba(29, 34, 42, 0.9);
+  color: #fff;
+  font-weight: 300;
+  padding: 20px 50px;
+  margin-right: -15px; }
+  @media only screen and (max-width: 767px) {
+    .sigin-box {
+      margin-left: -15px; } }
+
+.info-sigin {
+  padding-left: 50px;
+  position: relative;
+  font-weight: 500;
+  color: #FFF; }
+  .info-sigin a {
+    color: inherit; }
+
+.info-sigin span {
+  position: absolute;
+  font-size: 31px;
+  left: 0;
+  padding-top: 12px; }
+
+.sigin-form {
+  margin-top: 40px; }
+  .sigin-form .form-control {
+    border-color: #888; }
+  .sigin-form .form-control:not(textarea) {
+    background-color: transparent;
+    border-radius: 0;
+    color: #fff; }
+    .sigin-form .form-control:not(textarea):focus {
+      border-color: #ccc;
+      box-shadow: none; }
+  .sigin-form textarea.form-control {
+    background-color: transparent;
+    border-radius: 0;
+    color: #fff; }
+    .sigin-form textarea.form-control:focus {
+      border-color: #ccc;
+      box-shadow: none; }
+  .sigin-form .sigin-submit {
+    margin-top: 10px; }
+
+.profile {
+  padding: 10px;
+  min-height: 366px;
+  max-width: 320px;
+  margin: 0 auto 20px;
+  position: relative;
+  background: #f5f5f5 no-repeat center center;
+  background-size: cover; }
+
+/*# sourceMappingURL=custom.css.map */

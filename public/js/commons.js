@@ -1210,3 +1210,43 @@ $.extend($M, {
     }
 })(jQuery);
 
+
+// ========================= 多选checkbox插件 ==========================
+// 在DIV下生成一组checkbox，可以选中其中的几个，取值是一个数组，没个checkbox有不同的value
+(function($){
+
+    var MultiCheckbox = function (element, options) {
+        var that = this;
+        var $element = $(element);
+        this.$element = $element;
+    };
+
+    MultiCheckbox.prototype.val = function ( value ) {
+        if(value){
+            var $element = this.$element;
+            $.each(value, function(i, v){
+                $element.find('input[value=' + v + ']').prop('checked', true);
+            });
+        }else{
+            var result = [];
+            this.$element.find(':checked').each(function(i, el){
+                return result.push($(el).val());
+            });
+            return result;
+        }
+    };
+
+    // MODAL PLUGIN DEFINITION
+    // =======================
+    $.fn.multicheckbox = function( option, _relatedTarget ) {
+        var $this   = $(this)
+        var data    = $this.data('sharepage.multicheckbox')
+        var options = $.extend({}, $this.data(), typeof option == 'object' && option)
+
+        if (!data) 
+            $this.data('sharepage.multicheckbox', (data = new MultiCheckbox(this, options)))
+        if (typeof option == 'string') 
+            return data[option](_relatedTarget);
+    };
+})(jQuery);
+

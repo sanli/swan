@@ -1,0 +1,28 @@
+<section id="topNavBar" class="nav-wrapper <%= opt.navi_solide? 'solid' : 'transparent red' %>">
+<div class="container-fluid">
+  <div id="menuzord" class="menuzord red">
+    <a href="index.html" class="menuzord-brand">
+      <img style="height: 50px;" src="assets/images/logos/1-w.png" alt="california">
+    </a>
+    <ul class="menuzord-menu">
+      <li class="active"><a href="/index.html">首页</a></li>
+      <li><a href="#">女士</a></li>
+      <li><a href="#">男士</a></li>
+      <li><a href="#">认证专区</a></li>
+      <li class="item-icon hidden-xs">
+        <a id="toggelSearch" href="#">
+          <i class="ion-ios-search-strong"></i>
+        </a>
+        <form id="searchInput" class="navbar-form" role="search">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="输入查询内容...">
+            </div>
+        </form>
+      </li>
+      <li><a href="#">注册｜登录</a></li>
+      <li style="height: 1px" class="scrollable-fix"></li>
+    </ul>
+
+  </div>
+</div>
+</section><!--/nav-wrapper-->

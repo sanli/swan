@@ -67,51 +67,23 @@ exports.citySelector = function(name, opt){
     return selector += "</select>"
 };
 
-// 流程状态选择器
-exports.workflowStateSelector = function(name, opt){
-    opt = opt || { allowEmpty : false, required : false };
-    var selector =  '<select name="' + name + '" class="form-control" ' + (opt.required ? 'required' : '') + '>';
-    
-    selector += ( opt.allowEmpty ?  "<option value=''></option>" : "");
-    commonsdb.workflowStates.forEach(function(type){
-        selector += "<option value=" + type.value + ">" + type.name + "</option>\n";
-    });
-    return selector += "</select>";
-};
-
-// 部门类型选择框
-//  name : 输出控件的ID
-//  opt : 渲染参数， 
-//    { allowEmpty : false }
-exports.deptTypeSelector = function(name, opt){
-    opt = opt || { allowEmpty : false };
-    var selector =  "<select name=" + name + " class=\"form-control\" >";
-
-    selector += ( opt.allowEmpty ?  "<option value=''>不选择</option>" : "");
-    commonsdb.deptTypes.forEach(function(type){
-        selector += "<option value=" + type.name + ">" + type.name + "</option>\n";
-    });
-    return selector += "</select>";
-};
-
 // 基础数据枚举类型选择器
-var enumdb = require('../sys/enumdb.js'),
-    use_static_enum = false;
-exports.siteTypeSelector = function(name, module, table, field, opt){
+var enumdb = require('../sys/enumdb.js');
+exports.enumSelector = function(name, enumname, opt){
     opt = opt || { allowEmpty : false , required : false , disabled : false };
 
-    var key = [module, table, field].join('_'),
-        enums = (use_static_enum ? selectorMap[key]
-            :  enumdb.getEnum(module, table, field) );
+    var key = enumname,
+        enums = enumdb.getEnum(enumname);
 
     if(!enums) return '<span>程序错误：类型无效{' + key + '}</>';
 
     var selector =  "<select name=" + name + " class=\"form-control\" " 
-        + (opt.required ? " required ": "") + (opt.disabled ? " disabled ": "") + " >";
+        + (opt.required ? " required ": "") + (opt.disabled ? " disabled ": "") 
+        + (opt.style ? 'style="' + opt.style + '"' : "" ) + " >";
 
     selector += ( opt.allowEmpty ?  "<option>不选择</option>" : "");
     enums.forEach(function(type){
-        selector += "<option value=" + type + ">" + type + "</option>\n";
+        selector += "<option value=" + type.value + ">" + type.name + "</option>\n";
     });
     return selector += "</select>"   
 }
@@ -195,7 +167,12 @@ exports.createImpDnode = function(_moduledb, title){
 
 // 日期格式化工具
 exports.dateFormat = require('dateformat');
-
+exports.formatdate = function(date){
+    return exports.dateFormat(date, "yyyy-mm-dd");
+}
+exports.formattime = function(date){
+    return exports.dateFormat(date, "yyyy-mm-dd h:MM:ss");
+}
 
 // 返回所有的模块列表
 var moduledb = require('../sys/moduledb.js');
@@ -255,4 +232,7 @@ exports.getModuleTree = function(){
     return moduledb.getModuleTree();
 }
 
+exports.calcage = function(year){
+    return new Date().getFullYear() - year;
+}
 

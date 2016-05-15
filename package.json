@@ -9,6 +9,7 @@
     "async": "*",
     "body-parser": "*",
     "browserify": "*",
+    "chcitys": "^1.0.0",
     "compression": "*",
     "connect-mongo": "^0.8.1",
     "connect-multiparty": "^2.0.0",
@@ -25,6 +26,7 @@
     "jake": "~0.7.9",
     "jshint": "~2.4.4",
     "lazy": "*",
+    "lodash": "*",
     "memory-cache": "0.0.5",
     "method-override": "*",
     "mkdirp": "*",
@@ -43,7 +45,6 @@
     "tracer": "*",
     "uglify-js": "~2.4.13",
     "underscore": "*",
-    "lodash": "*",
     "winston": "*"
   },
   "devDependencies": {

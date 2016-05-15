@@ -38,6 +38,8 @@ var IMP = {
 var CRUD = {
     data : {name: 'data', key: 'data', optional: false},
     _id : {name:'_id', key:'_id', optional: false},
+    username : {name: 'username', key: 'username', optional: false},
+    password : {name: 'password', key: 'password', optional: false},
 }
 
 
@@ -50,7 +52,7 @@ exports.bindurl=function(app){
 
     //动态文件
     share.bindurl(app, '/member.html', { outType : 'page'}, exports.page);
-    share.bindurl(app, '/member/create', exports.create);
+    share.bindurl(app, '/member/create', { needAuth : false }, exports.create);
     share.bindurl(app, '/member/update', exports.update);
     share.bindurl(app, '/member/list', exports.list);
 
@@ -63,6 +65,20 @@ exports.bindurl=function(app){
     share.bindurl(app, '/member/dlg/:dlgfile', { outType : 'page'}, exports.dlg);
     //TODO: 扩展的API加在下面
     // ...
+    share.bindurl(app, '/member/signin', exports.signin);
+    share.bindurl(app, '/member/signout', exports.signout);
+    // 读取用户信息
+    share.bindurl(app, '/member/myprofile', { needMember : true }, exports.myprofile);
+    share.bindurl(app, '/member/updateprofile', { needMember : true }, exports.updateprofile);
+    // 增加用户在线时间
+    share.bindurl(app, '/member/onlinecheck', { needMember : true }, exports.onlinecheck);
+    // 增加用户在线时间
+    share.bindurl(app, '/member/dailycheck', { needMember : true }, exports.dailycheck);
+    
+
+    // ===============前端页面======================
+    // 个人中心
+    share.bindurl(app, '/profile.html', { needMember : true , outType : 'page'}, exports.profile);
 }
 
 
@@ -84,9 +100,15 @@ exports.create = function(req, res){
     if(!arg.passed)
        return;
 
+    // hash the password
+    if(arg.data.密码) {
+        arg.data.密码 = share.hashpass(arg.data.密码);
+    }
     memberdb.create(arg.data, function(err, newDoc){
         if(err) return share.rt(false, `创建新${module_desc}对象出错:`  + err.message, res);
 
+        var member = newDoc.toObject();
+        req.session.member = member;
         share.rt(true, { _id: newDoc._id }, res);
     });
 }
@@ -184,10 +206,6 @@ exports.delete = function(req, res){
 }
 
 
-
-
-
-
 // 返回对话框内容
 exports.dlg = function(req, res){
     var arg = share.getParam("输出对话框:", req, res, [PAGE.dlgfile]);
@@ -202,8 +220,96 @@ exports.dlg = function(req, res){
 
 
 // === 扩展的代码请加在这一行下面，方便以后升级模板的时候合并 ===
+exports.signout = function(req, res){
+    req.session.member = null;
+    res.redirect('/');
+}
+
+exports.signin = function(req, res){
+    var arg = share.getParam("会员登陆", req, res, [CRUD.username, CRUD.password]);
+    if(!arg.passed) return;
+
+    var password = share.hashpass(arg.password);
+    var username = arg.username;
+
+    memberdb.findByCond( { 昵称 : username, 密码 : password }, function(err, member){
+        if(err) return share.rt(false, "登录出错：" + err.message, res);
+        if(!member) return share.rt(false, "用户不存在或者密码错误", res);
+
+        console.log("会员登录成功，昵称：%s", member.昵称);
+        delete member['密码'];
+        req.session.member = member;
+        share.rt(true, { msg : "登录成功" }, res);
+    });
+}
+
+exports.myprofile = function(req, res){
+    var memberid = req.session.member._id;
+    memberdb.findById( memberid, function(err, member){
+        if(err) return share.rt(false, "查询出错：" + err.message, res);
+        if(!member) return share.rt(false, "用户不存在", res);
+
+        share.rt(true, { doc : member }, res);
+    });
+}
 
 
+exports.updateprofile = function(req, res){
+    var memberid = req.session.member._id;
 
+    var arg = share.getParam(`更新${module_desc}对象`, req, res, [CRUD.data]);
+    if(!arg.passed) return;
 
+    var data = arg.data;
+    data.utime = new Date();
+    delete data._id;
+    memberdb.update( memberid , data , function(err, member){
+        if(err) {
+            console.log(err);
+            return share.rt(false, `更新${module_desc}对象出错:` + err.message, res);
+        }
+        
+        req.session.member = member.toObject();
+        share.rt(true, { doc : member }, res);
+    });
+}
 
+exports.onlinecheck = function(req, res){
+    var memberid = req.session.member._id;
+    var arg = share.getParam(`更新${module_desc}对象`, req, res, [CRUD.data]);
+    if(!arg.passed) return;
+    var inc = arg.data.inc;
+
+    memberdb.findById( memberid, function(err, member){
+        if(err) return share.rt(false, "查询出错：" + err.message, res);
+        if(!member) return share.rt(false, "用户不存在", res);
+
+        // 根据用户最后修改时间计算在线时长，每次收到OnlineCheck，在线时长增加一分钟
+        // TODO: 会被刷，应该在服务器端计算在线时长，目前先在开户端计数
+        memberdb.member.update({ _id : memberid }
+            , { $set : { $inc : { 在线时长 : inc } } }
+            , function(err){
+                if(err) return share.rt(false, "查询出错：" + err.message, res);
+                console.log(arguments);
+
+                share.rt(true, { 在线时长 : member.在线时长 + inc }, res);
+            });
+    });
+}
+
+exports.dailycheck = function(req, res){
+
+}
+
+exports.profile = function(req, res){
+    res.render('front/profilepage.html', {
+        conf : conf,
+        user: req.session.user,
+        member : req.session.member,
+        commons : commons,
+        session : req.session,
+        opt : {
+            title : "天鹅网",
+        }
+    });
+}

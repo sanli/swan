@@ -1,0 +1,235 @@
+<% include ./inc/f_head.html %>
+<% include ./inc/f_navi.html %>
+	
+
+<header id="site-header" class="site-header header-classic wrapper-table">
+    <div class="slim-bg-05 overlay-01 parallax-hero" data-top="transform: translate3d(0px, 0px, 0px)" data-top-bottom="transform: translate3d(0px, -200px, 0px)" data-anchor-target="#site-header"></div>
+
+    <div class="container">
+        <div class="row">
+            <div  class="intro col-sm-7">
+                <h2 style="font-weight: 600">实名认证专区</h2>
+                <p class="subtitle">我在这里等你，敢约你就来</p>
+                <div class="btn-cal-group">
+                    <a href="/comingsoon.html" class="btn btn-cal-default-o">查看详情<i class="ion-play"></i></a>
+                </div><!-- btn-cal-group -->
+            </div>
+            <!-- 登录或者注册form -->
+            <div class="col-sm-5">
+
+            <%if(!member){%>
+                <div class="sigin-box" style="border-radius: 5px;">
+                    <h5>登陆天鹅网</h5>
+                    <form id="login-form" action="" class="sigin-form" id="siginForm" method="post" name="siginform" role="form">
+                        <div class="form-group">
+                            <label class="sr-only" for="name">帐号</label>
+                            <input type="text" class="form-control" name="username" required="" placeholder="帐号">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="sr-only" for="email">密码</label>
+                            <input type="password" class="form-control" name="password" required="" placeholder="密码">
+                        </div>
+                        <div class="form-group">
+                            <div class="">
+                              <a>忘记密码?</a>
+                            </div>
+                          </div>
+                        <div class="btn-cal-group">
+                            <button id="cfsubmit" type="button" class="btn btn-cal-default">登陆</button>
+                            <a href="/register.html" class="btn btn-cal-default-o-color">注册<i class="ion-play"></i></a>
+                        </div>
+                    </form>
+                </div>
+            <% }else{ %>
+                <div class="sigin-box" style="border-radius: 5px;">
+                    <h5>登陆天鹅网</h5>
+                    <div class="row">
+                       <div class="col-md-6">
+                           <figure>
+                               <img alt="" class="img-responsive" src="assets/images/testimonial/testimonial_1p.jpg">
+                           </figure>
+                       </div>
+                       <div class="col-md-6">
+                           <p>欢迎您：<%=member.昵称 %></p>
+                           <p><%=member.会员级别 %>根</p>
+                           <p>当前羽毛：<a href="#"><%=member.羽毛数量 %>根</a></p>
+                       </div>
+                    </div>
+                    <form action="" class="sigin-form" id="siginForm" method="post" name="siginform" role="form">
+                        <div class="btn-cal-group">
+                            <a href="/profile.html" class="btn btn-cal-default">进入个人中心<i class="ion-play"></i></a>
+                            <a href="/member/signout" class="btn btn-cal-default-o-color">安全退出<i class="ion-play"></i></a>
+                        </div>
+                    </form>
+                </div>
+            <% } %>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- =======================================
+                Our Services
+========================================= -->
+<section class="section cta-big mild-bg" style="z-index: 99;">
+    <div class="container">
+        <div class="row">
+            <form id="search-form" class="form-inline">
+              <div class="form-group col-md-2">
+                <label class="" for="exampleInputName2">我要找:</label>
+                <%- commons.enumSelector('sex','首页.查询目标', {
+                    style : "min-width: 60px"
+                }) %>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="exampleInputEmail2">年龄:</label>
+                <%- commons.enumSelector('minage','首页.查询年龄', {
+                    style : "min-width: 80px"
+                }) %>
+                -
+                <%- commons.enumSelector('maxage','首页.查询年龄', {
+                    style : "min-width: 80px"
+                }) %>
+              </div>
+              <div class="form-group col-md-5">
+                <label for="exampleInputEmail2">地区:</label>
+
+                <div class="wrap form-control">
+                    <input id="city" type="text" readonly />
+                    <div class="city-select-warp"></div>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-cal-default">搜索</button>
+            </form>
+        </div>
+    </div><!-- container -->
+
+</section> <!-- /#services -->
+
+<!-- ========================================
+			team
+========================================== -->
+<section id="team" class="section team p-b-0 white-bg">
+    <header>
+        <h5>他们正在交友</h5>
+    </header>
+
+    <div class="section-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 col-sm-6">
+                    <div class="team-profile" style="background-image: url(assets/images/team/chairpersons_1.jpg)">
+                        <span class="badge base-bg">白银VIP</span>
+                        <div class="team-intro text-left">
+                            <p>昵称: 我的笑容你不懂</p>
+                            <p>年龄: 22<span style="float: right;">学历: 本科</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="team-profile" style="background-image: url(assets/images/team/chairpersons_2.jpg)">
+                    <span class="badge base-bg">白银VIP</span>
+                        <div class="team-intro text-left">
+                            <p>昵称: 我的笑容你不懂</p>
+                            <p>年龄: 22<span style="float: right;">学历: 本科</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="team-profile" style="background-image: url(assets/images/team/chairpersons_3.jpg)">
+                        <div class="team-intro text-left">
+                            <p>昵称: 我的笑容你不懂</p>
+                            <p>年龄: 22<span style="float: right;">学历: 本科</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="team-profile" style="background-image: url(assets/images/team/chairpersons_4.jpg)">
+                        <div class="team-intro text-left">
+                            <p>昵称: 我的笑容你不懂</p>
+                            <p>年龄: 22<span style="float: right;">学历: 本科</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="team-profile" style="background-image: url(assets/images/team/chairpersons_5.jpg)">
+                        <div class="team-intro text-left">
+                            <p>昵称: 我的笑容你不懂</p>
+                            <p>年龄: 22<span style="float: right;">学历: 本科</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="team-profile" style="background-image: url(assets/images/team/chairpersons_5.jpg)">
+                        <div class="team-intro text-left">
+                            <p>昵称: 我的笑容你不懂</p>
+                            <p>年龄: 22<span style="float: right;">学历: 本科</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div><!--/row-->
+        </div>
+    </div>
+</section> <!-- /.team -->
+
+<!-- ============================================
+            立即加入
+============================================== -->
+<section id="cta-8" class="section cta cta-8 base-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="cta-content">
+                    <h4> 立即加入 <i class="ion-heart"></i> 天鹅网 </h4>
+                </div>
+            </div>
+        </div>
+    </div><!-- container -->
+</section>
+
+
+<!-- 通用的页面元素和模版 
+============================================= -->
+<% include ./inc/f_sharepage.html %>
+
+
+<!-- Javascripts
+============================================= -->
+
+<script src="assets/lib/components-modernizr/modernizr.js"></script>
+<script src="assets/lib/jquery/dist/jquery.js"></script>
+<script src="assets/lib/bootstrap/dist/js/bootstrap.js"></script>
+<script src="assets/lib/imagesloaded/imagesloaded.pkgd.min.js"></script>
+<script src="assets/lib/animsition/dist/js/animsition.min.js"></script>
+<script src="assets/lib/magnific-popup/dist/jquery.magnific-popup.js"></script>
+
+
+<script src="assets/lib/FlexSlider/jquery.flexslider.js"></script>
+<!-- 百度地图 --> 
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5QcmQoDn6cOoOQyB5WGggyPdVTObgrpN"></script>
+<script src="assets/lib/jquery.mb.YTPlayer/dist/jquery.mb.YTPlayer.min.js"></script>
+
+<script src="assets/lib/waypoints/lib/jquery.waypoints.min.js"></script>
+<script src="assets/lib/waypoints/lib/shortcuts/inview.min.js"></script>
+
+<script src="assets/lib/isotope/dist/isotope.pkgd.min.js"></script>
+
+<script src="assets/lib/owlcarousel/owl-carousel/owl.carousel.js"></script>
+<script src="assets/lib/countdown/dest/jquery.countdown.min.js"></script>
+<script src="assets/lib/vide/dist/jquery.vide.js"></script>
+
+<script src="assets/js/plugins.js"></script>
+<script src="assets/js/main.js"></script>
+
+<link rel="stylesheet" href="/css/jquery.city.style.css">
+<script type="text/javascript" src="/js/jquery.city.js"></script>
+
+<script src="/js/sharepage.base.js"></script>
+<script src="/js/sharepage.js"></script>
+<script src="/js/sharepage.ext.js"></script>
+
+<script src="/js/commons.js"></script>
+<script src="/js/index.js"></script>
+
+
+<% include ./inc/f_foot.html %>

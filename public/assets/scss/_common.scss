@@ -108,6 +108,10 @@ $sectionPadding : 80px;
     z-index: 0;
 }
 
+.container {
+  max-width: 960px;
+}
+
 .container, .container-fluid{
     position: relative;
     z-index: 1;
