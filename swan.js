@@ -71,7 +71,7 @@ share.bindurl(app, '/upload', { outType : 'page'}, upload.upload);
 share.bindurl(app, '/upload/preview', { outType : 'page'}, upload.preview);
 share.bindurl(app, '/download', { outType : 'page'}, commons.download);
 require('./routes/index.js').bindurl(app);
-
+require('./routes/qnupload.js').bindurl(app);
 // 注册系统基础管理模块
 app.use(express.static(path.join(__dirname, 'sys/public')));
 var x = app.get('views');

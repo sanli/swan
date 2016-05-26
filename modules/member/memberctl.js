@@ -10,8 +10,10 @@ var memberdb = require('./memberdb.js')
     , express = require('express')
     , path = require('path')
     , sf = require('../../config.js')
+    , async = require('async')
     , commons = require('../../routes/commons.js')
     , inspect = require('util').inspect
+    , _ = require('lodash')
     , ObjectID = require('mongodb').ObjectID;
 
 // 模块相关的全局属性
@@ -38,6 +40,7 @@ var IMP = {
 var CRUD = {
     data : {name: 'data', key: 'data', optional: false},
     _id : {name:'_id', key:'_id', optional: false},
+    uuid : {name:'uuid', key:'uuid', optional: false},
     username : {name: 'username', key: 'username', optional: false},
     password : {name: 'password', key: 'password', optional: false},
 }
@@ -59,14 +62,14 @@ exports.bindurl=function(app){
     share.bindurl(app, '/member/get', exports.get);
     share.bindurl(app, '/member/retriveByCond', exports.retriveByCond);
     share.bindurl(app, '/member/delete', exports.delete);
-    share.bindurl(app, '/member/count', exports.count);
+    share.bindurl(app, '/member/count', { needMember : true }, exports.count);
 
 
     share.bindurl(app, '/member/dlg/:dlgfile', { outType : 'page'}, exports.dlg);
     //TODO: 扩展的API加在下面
     // ...
-    share.bindurl(app, '/member/signin', exports.signin);
-    share.bindurl(app, '/member/signout', exports.signout);
+    share.bindurl(app, '/member/signin', { needAuth : false, needMember : false }, exports.signin);
+    share.bindurl(app, '/member/signout', { needAuth : false, needMember : false }, exports.signout);
     // 读取用户信息
     share.bindurl(app, '/member/myprofile', { needMember : true }, exports.myprofile);
     share.bindurl(app, '/member/updateprofile', { needMember : true }, exports.updateprofile);
@@ -74,11 +77,17 @@ exports.bindurl=function(app){
     share.bindurl(app, '/member/onlinecheck', { needMember : true }, exports.onlinecheck);
     // 增加用户在线时间
     share.bindurl(app, '/member/dailycheck', { needMember : true }, exports.dailycheck);
+    // 在线时间兑换羽毛
+    share.bindurl(app, '/member/exchangefeather', { needMember : true }, exports.exchangefeather);
     
 
     // ===============前端页面======================
     // 个人中心
-    share.bindurl(app, '/profile.html', { needMember : true , outType : 'page'}, exports.profile);
+    share.bindurl(app, '/member/profile.html', { needMember : true , outType : 'page'}, exports.profile);
+    share.bindurl(app, '/member/profile/:uuid', { needMember : true , outType : 'page'}, exports.viewprofile);
+    // 成员列表
+    share.bindurl(app, '/member/listmemberapi', { needMember : true }, exports.listmemberapi) ;
+    share.bindurl(app, '/member/listmember.html', { needMember : true }, exports.listmember);
 }
 
 
@@ -279,26 +288,111 @@ exports.onlinecheck = function(req, res){
     var arg = share.getParam(`更新${module_desc}对象`, req, res, [CRUD.data]);
     if(!arg.passed) return;
     var inc = arg.data.inc;
-
     memberdb.findById( memberid, function(err, member){
         if(err) return share.rt(false, "查询出错：" + err.message, res);
         if(!member) return share.rt(false, "用户不存在", res);
 
         // 根据用户最后修改时间计算在线时长，每次收到OnlineCheck，在线时长增加一分钟
         // TODO: 会被刷，应该在服务器端计算在线时长，目前先在开户端计数
-        memberdb.member.update({ _id : memberid }
-            , { $set : { $inc : { 在线时长 : inc } } }
-            , function(err){
-                if(err) return share.rt(false, "查询出错：" + err.message, res);
-                console.log(arguments);
+        _inc_online(memberid, inc, function(err, data){
+            if(err) return share.rt(false, "查询出错：" + err.message, res);
 
-                share.rt(true, { 在线时长 : member.在线时长 + inc }, res);
+            share.rt(true, { 在线时长 : member.在线时长 + inc }, res);
+        });
+        memberdb.member.update({ _id : memberid }
+            , { $inc : { 在线时长 : inc } }
+            , function(err){
+           
             });
     });
 }
 
-exports.dailycheck = function(req, res){
 
+function _inc_further(memberid, inc, fn){
+    memberdb.member.findOneAndUpdate({ _id : memberid }
+        , { $inc : { 羽毛数量 : inc } }
+        , { new : true }
+        , function(err, member){
+            if(err) return fn(err);
+            
+            fn(null, { 羽毛数量 : member.羽毛数量 });
+        });    
+}
+
+
+function _inc_online(memberid, inc, fn){
+    memberdb.member.findOneAndUpdate({ _id : memberid }
+        , { $inc : { 在线时长 : inc } }
+        , { new : true }
+        , function(err, member){
+            if(err) return fn(err);
+            
+            fn(null, { 在线时长 : member.在线时长 });
+        });    
+}
+
+
+
+// 签到送羽毛
+var ONE_DAY = 24 * 60 * 60 * 1000;
+exports.dailycheck = function(req, res){
+    var memberid = req.session.member._id;
+    memberdb.findById( memberid, function(err, member){
+        if(err) return share.rt(false, "查询出错：" + err.message, res);
+        if(!memberid) return share.rt(false, "用户不存在", res);
+
+        if(member.最后签到时间 && (new Date().getTime() - member.最后签到时间) <= ONE_DAY){
+            return share.rt(true, { 羽毛数量 : member.羽毛数量 }, res);
+        }
+
+        async.waterfall([
+            function(callback){
+                _inc_further(memberid, 1,callback);
+            },
+            function(data, callback){
+                // 更新最后签到时间
+                memberdb.member.update({ _id : memberid}
+                    , { $set : { 最后签到时间 : new Date() } }
+                    , function(err){
+                        if(err) return callback(err);
+
+                        callback(null, data);
+                    });
+            }
+        ], function(err, result){
+            if(err) return share.rt(false, "查询出错：" + err.message, res);
+
+            return share.rt(true, { 羽毛数量 : result.羽毛数量 }, res);
+        });
+    });
+}
+
+// 在线时间换羽毛
+var ONE_FURTHER = 10; // 10分钟换一个羽毛
+exports.exchangefeather = function(req, res){
+    var memberid = req.session.member._id;
+    memberdb.findById( memberid, function(err, member){
+        if(err) return share.rt(false, "查询出错：" + err.message, res);
+        if(!memberid) return share.rt(false, "用户不存在", res);
+
+        var furtherinc = Math.floor(member.在线时长 / ONE_FURTHER);
+        var exchangetime = furtherinc * ONE_FURTHER;
+        async.waterfall([
+            function(callback){
+                _inc_further(memberid, furtherinc, callback);
+            },
+            function(data, callback){
+                _inc_online(memberid, exchangetime, function(err, odata){
+                    if(err) return callback(err);
+                    return callback(null, _.extend({}, data, odata));
+                });
+            }
+        ], function(err, result){
+            if(err) return share.rt(false, "查询出错：" + err.message, res);
+
+            return share.rt(true, result, res);
+        });
+    });
 }
 
 exports.profile = function(req, res){
@@ -313,3 +407,64 @@ exports.profile = function(req, res){
         }
     });
 }
+
+// 看别人
+exports.viewprofile = function(req, res){
+    var arg = share.getParam(`更新${module_desc}对象`, req, res, [CRUD.uuid], { use : 'params'});
+    if(!arg.passed) return;    
+
+    async.series({
+        viewmember : async.apply( memberdb.findById, arg.uuid),
+    }, function(err, result){
+        if(err) return rt(false, "用户不存在", res);
+        if(!result.viewmember) return rt(false, "用户不存在", res);
+
+        res.render('front/viewprofilepage.html', {
+            conf : conf,
+            user: req.session.user,
+            member : req.session.member,
+            viewmember : result.viewmember,
+            commons : commons,
+            session : req.session,
+            opt : {
+                title : "天鹅网",
+            }
+        });
+    });
+}
+
+// 查询会员列表
+exports.listmember = function(req, res){
+    res.render('front/listmemberpage.html', {
+        conf : conf,
+        user : req.session.user,
+        commons : commons,
+        opt : {
+            title : module_desc
+        }
+    });
+}
+
+// 查询对象，并返回列表
+exports.listmemberapi = function(req, res){
+    var arg = share.getParam(`查询${module_desc}列表 with listmemberapi`, req, res, [PAGE.page, PAGE.cond, PAGE.sort]);
+    if(!arg.passed)
+        return;
+
+    var page = {
+        skip : parseInt(arg.page.skip),
+        limit : parseInt(arg.page.limit),
+    };
+
+    share.searchCondExp(arg.cond);
+    share.fillUserDataRule(arg.cond, req);
+    memberdb.list(arg.cond, arg.sort, page, function(err, docs){
+        if(err) return share.rt(false, err.message, res);
+        
+        // 执行信息过滤
+
+        share.rt(true, { docs: docs }, res);
+    });
+};
+
+

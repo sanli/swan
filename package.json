@@ -36,6 +36,7 @@
     "node-uuid": "*",
     "node-zip": "*",
     "node.extend": "*",
+    "qiniu": "^6.1.11",
     "redis": "0.10.3",
     "serve-favicon": "*",
     "serve-static": "*",

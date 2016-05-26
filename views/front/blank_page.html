@@ -1,26 +1,38 @@
 <% include ./inc/f_head.html %>
+<% opt.navi_solide = true %>
 <% include ./inc/f_navi.html %>
 	
-	<!-- 需要的内容放置到这里 -->
 	<div style="min-height:75vh; padding-top: 200px;color: #e2e2e2;" class="text-center mild-bg">
 		<h1 style="margin-bottom:0;">BLANK PAGE</h1>
 	</div>
 
-<!-- Javascripts
+
+<% include ./inc/f_footnavi.html%>
+
+<!-- Offcanvas Elements
 ============================================= -->
 
-<script src="assets/lib/components-modernizr/modernizr.js"></script>
-<script src="assets/lib/jquery/dist/jquery.js"></script>
-<script src="assets/lib/bootstrap/dist/js/bootstrap.js"></script>
-<script src="assets/lib/imagesloaded/imagesloaded.pkgd.min.js"></script>
-<script src="assets/lib/animsition/dist/js/animsition.min.js"></script>
-<script src="assets/lib/magnific-popup/dist/jquery.magnific-popup.js"></script>
 
+<!-- 通用的页面元素和模版 
+============================================= -->
+<% include ./inc/f_sharepage.html %>
 
+<!-- Javascripts
+============================================= -->
+<script src="/assets/lib/components-modernizr/modernizr.js"></script>
+<script src="/assets/lib/jquery/dist/jquery.js"></script>
+<script src="/assets/lib/bootstrap/dist/js/bootstrap.js"></script>
+<script src="/assets/lib/imagesloaded/imagesloaded.pkgd.min.js"></script>
+<script src="/assets/lib/animsition/dist/js/animsition.min.js"></script>
+<script src="/assets/lib/magnific-popup/dist/jquery.magnific-popup.js"></script>
+<script src="/assets/lib/owlcarousel/owl-carousel/owl.carousel.js"></script>
+<script src="/assets/js/plugins.js"></script>
+<script src="/assets/js/main.js"></script>
 
-
-
-<script src="assets/js/plugins.js"></script>
-<script src="assets/js/main.js"></script>
+<script src="/js/sharepage.base.js"></script>
+<script src="/js/sharepage.js"></script>
+<script src="/js/sharepage.ext.js"></script>
+<script src="/js/commons.js"></script>
+<script src="/js/front/profile.js"></script>
 
 <% include ./inc/f_foot.html %>

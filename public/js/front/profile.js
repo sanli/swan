@@ -44,6 +44,7 @@ var Module = $.extend(new $M(), {
             Module.updateBaseInfo(data);
             Module.updateHoney(data);
             Module.updateContact(data);
+            Module.updateOnlinetime(data);
         });
     },
 
@@ -98,6 +99,27 @@ var Module = $.extend(new $M(), {
                 Module.updateContact(data);
             });
         }); 
+
+        $('#daily-check-btn').on('click', function(e){
+            e.preventDefault();
+
+            $M.doupdate('/member/dailycheck', {}, { 
+                successfn : function(module){
+                    $.alert('body', '签到成功，当前羽毛数:' + module.羽毛数量);
+                }
+            });
+        });
+
+        $('#onlinetime-exchange-btn').on('click', function(e){
+            e.preventDefault();
+
+            $M.doupdate('/member/exchangefeather', {}, { 
+                successfn : function(module){
+                    $.alert('body', '兑换成功，当前羽毛数:' + module.羽毛数量 
+                        + ' 当前在线时间:' + module.在线时长);
+                }
+            });
+        });
     },
  
     //====================================================================================================================
@@ -165,9 +187,12 @@ var Module = $.extend(new $M(), {
 
 
     updateContact : function(data){
-        var odata = $.extend({}, data);
-        
+        var odata = $.extend({}, data);        
         $('#member-contact-form-ro').autofill(odata);
+    },
+
+    updateOnlinetime : function(data){
+        $('#onlinetimespan').html(data.在线时长 + '分钟');
     },
     
     // ========================================================================

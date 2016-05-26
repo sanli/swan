@@ -81,7 +81,7 @@ var Module = $.extend(new $M(), {
                 Module.loadPageData(PG.state.cond, PG.state.page);
                 $.alert('','注册成功，3秒钟后会跳转到您的主页面');
                 setTimeout(function(){
-                    location.href = '/profile.html';
+                    location.href = '/member/profile.html';
                 }, 2000);
             }, function(err){
                 $.alert('#moduleDlg .modal-body', err, 10000);

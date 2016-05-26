@@ -1,6 +1,14 @@
 <script>
 	(function($) {
-		
+		setInterval(function(){
+			$M.doupdate('/member/onlinecheck', { data : { inc : 1 } }, { 
+				successfn : function(module){
+					if(Module && Module.updateOnlinetime){
+						Module.updateOnlinetime(module);
+					}
+				}
+			});
+		},60 * 1000);
 	})(jQuery)
 </script>
 

@@ -175,10 +175,16 @@ var getreq = function(msg, req, res, params, payload){
 exports.getreq = getreq;
 
 //验证并读取查询条件
-var getParam = function(msg, req, res, params){
+var getParam = function(msg, req, res, params, opt){
 	try{
-		console.log(req.param('payload'));
-		var payload = JSON.parse(req.param('payload'));
+		var opt = opt || { use : 'payload' };
+		// 参数传递方式
+		if(opt.use === 'params'){
+			var payload = req.params;
+		}else{
+			var payload = JSON.parse(req.param('payload'));	
+		}
+		
 		var arg = getreq(msg, req, res, params, payload);
 		return arg.setPassed(true);
 	}catch(err){

@@ -62,7 +62,9 @@ exports.bindurl=function(app){
 
     share.bindurl(app, '/member_log/dlg/:dlgfile', { outType : 'page'}, exports.dlg);
     //TODO: 扩展的API加在下面
-    // ...
+    // 我看过的和看过我的
+    // share.bindurl(app, '/member_log/review_list.html', exports.review_list);
+    // share.bindurl(app, '/member_log/visitor_list.html', exports.visitor_list);
 }
 
 

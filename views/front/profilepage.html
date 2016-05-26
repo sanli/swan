@@ -12,7 +12,7 @@
 <section id="singleProduct" class="section single-product">
         <div class="row">
             <div class="col-md-4 col-md-offset-0 col-sm-8 col-sm-offset-2 product-sidebar">
-            	<div class="profile" style="background-image: url(assets/images/team/chairpersons_4.jpg)">
+            	<div class="profile" style="background-image: url(/assets/images/team/chairpersons_4.jpg)">
             		<%if(member.会员级别 === !'普通会员' ){%>
             			<span class="badge base-bg"><%=member.会员级别 %></span>
             		<%}%>
@@ -154,113 +154,7 @@
 		          </div>
 		        </div>
             </div>
-
-            <!-- ==============================================
-							shop Sidebar
-			================================================ -->
-
-			<div class="sidebar col-md-4">
-
-			    <div class="offer-widget">
-			        <p>在线时长：(...)分钟 <a href="#" class="pull-right">兑换</a></p>
-			        <a href="#" class="btn btn-cal-default">每日签到送羽毛</a>
-			    </div>
-
-			    <div class="widget catagory-widget">
-					<h5>热门增值服务</h5>
-					<ul>
-			            <li>
-			                <a href="#" title="手机号认真免费试用3天">意中人上线提醒 <span class="badge pull-right">购买</span></a>
-			            </li>
-
-			            <li>
-			                <a href="#" title="">自动接受邀请 <span class="badge pull-right">购买</span></a>
-			            </li>
-
-			            <li>
-			                <a href="#" title="">推送本人资料给新注册用户 <span class="badge pull-right">购买</span></a>
-			            </li>
-
-			            <li>
-			                <a href="#" title="">多城一家服务 <span class="badge pull-right">购买</span></a>
-			            </li>
-
-			            <li>
-			                <a href="#" title="">账户本地置顶服务 <span class="badge pull-right">购买</span></a>
-			            </li>
-
-			            <li>
-			                <a href="#" title="">黄金会员私人服务 <span class="badge pull-right">购买</span></a>
-			            </li>
-			        </ul>
-				</div>
-
-
-				<div class="counter-widget">
-			        <div class="row">
-			            <!-- Fact Item -->
-			            <div class="col-sm-4">
-			                <div class="fact">
-			                	<p class="fact-text">我中意的</p>
-			                    <h5 class="fact-number">30</h5>
-			                </div>
-			            </div>
-			            <!--/ End Fact Item -->
-			            <div class="col-sm-4">
-			                <div class="fact">
-			                    <p class="fact-text">中意我的</p>
-			                    <h5 class="fact-number">50</h5>
-			                </div>
-			            </div>
-			            <!--/ End Fact Item -->
-			            <div class="col-sm-4">
-			                <div class="fact">
-			                    <p class="fact-text">最近访客</p>
-			                    <h5 class="fact-number">30</h5>
-			                </div>
-			            </div>
-			        </div>
-			    </div>
-
-			    <div class="list-group">
-				  <a href="#" class="list-group-item">
-				    <span class="icon-megaphone"></span> 网站通知 <span class="badge">4</span>
-				  </a>
-				  <a href="#" class="list-group-item">
-				  	<span class="icon-envelope"></span> 意中人来信
-				  </a>
-				  <a href="#" class="list-group-item">
-				  	<span class="icon-pencil"></span> 写信给意中人
-				  </a>
-				  <a href="#" class="list-group-item">
-				  	<span class="icon-lightbulb"></span> 谁看过我
-				  </a>
-				  <a href="#" class="list-group-item">
-				  	<span class="icon-linegraph"></span> 我看过谁
-				  </a>
-				</div>
-
-				<div class="widget catagory-widget">
-					<h5>诚信值</h5>
-					<ul>
-			            <li>
-			                <a href="#" title="">上传头像 ＋5 <span class="badge pull-right">去认证</span></a>
-			            </li>
-
-			            <li>
-			                <a href="#" title="View all posts from Catagory2">邮箱认证 +5 <span class="badge pull-right">去认证</span></a>
-			            </li>
-
-			            <li>
-			                <a href="#" title="View all posts from Catagory3">QQ认证 +5 <span class="badge pull-right">去认证</span></a>
-			            </li>
-
-			            <li>
-			                <a href="#" title="View all posts from Catagory4">手机认证 +5 <span class="badge pull-right">去认证</span></a>
-			            </li>
-			        </ul>
-				</div>
-			</div>
+<% include ./inc/f_profile_sidebar.html%>
         </div>
 </section>
 
@@ -441,15 +335,15 @@
 
 <!-- Javascripts
 ============================================= -->
-<script src="assets/lib/components-modernizr/modernizr.js"></script>
-<script src="assets/lib/jquery/dist/jquery.js"></script>
-<script src="assets/lib/bootstrap/dist/js/bootstrap.js"></script>
-<script src="assets/lib/imagesloaded/imagesloaded.pkgd.min.js"></script>
-<script src="assets/lib/animsition/dist/js/animsition.min.js"></script>
-<script src="assets/lib/magnific-popup/dist/jquery.magnific-popup.js"></script>
-<script src="assets/lib/owlcarousel/owl-carousel/owl.carousel.js"></script>
-<script src="assets/js/plugins.js"></script>
-<script src="assets/js/main.js"></script>
+<script src="/assets/lib/components-modernizr/modernizr.js"></script>
+<script src="/assets/lib/jquery/dist/jquery.js"></script>
+<script src="/assets/lib/bootstrap/dist/js/bootstrap.js"></script>
+<script src="/assets/lib/imagesloaded/imagesloaded.pkgd.min.js"></script>
+<script src="/assets/lib/animsition/dist/js/animsition.min.js"></script>
+<script src="/assets/lib/magnific-popup/dist/jquery.magnific-popup.js"></script>
+<script src="/assets/lib/owlcarousel/owl-carousel/owl.carousel.js"></script>
+<script src="/assets/js/plugins.js"></script>
+<script src="/assets/js/main.js"></script>
 
 <script src="/js/sharepage.base.js"></script>
 <script src="/js/sharepage.js"></script>

@@ -316,6 +316,8 @@
     //显示查询控制条，加上了简单的动画
     processQuickSearch : function(cond, $el){
         var fieldstr = $el.data('sharepage-quicksearch');
+        if(!fieldstr) return;
+
         var fields = fieldstr.split(',');
         if(cond.quick_search_key){
             if(fields.length >= 1 ){
@@ -385,6 +387,10 @@
         }
     },
 
+    calcage : function(year){
+        return new Date().getFullYear() - year;
+    },
+    
   });
 })(window.jQuery);
 

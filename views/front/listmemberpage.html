@@ -1,0 +1,115 @@
+<% include ./inc/f_head.html %>
+<% opt.navi_solide = true %>
+<% include ./inc/f_navi.html %>
+	
+
+<header id="header" class="header-inner mild-bg">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="#">首页</a>
+            <i class="fa fa-angle-double-right"></i><a href="#">会员查询</a>
+            <i class="fa fa-angle-double-right"></i>
+            <a href="#">女士</a>
+        </div>
+        <h5>查询女士</h5>
+    </div>
+    <div class="container">
+        <div class="row">
+            <form id="search-form" class="form-inline">
+              <div class="form-group col-md-4">
+                <label for="exampleInputEmail2">年龄:</label>
+                <%- commons.enumSelector('minage','首页.查询年龄', {
+                    style : "min-width: 80px"
+                }) %>
+                -
+                <%- commons.enumSelector('maxage','首页.查询年龄', {
+                    style : "min-width: 80px"
+                }) %>
+              </div>
+              <div class="form-group col-md-5">
+                <label for="exampleInputEmail2">地区:</label>
+
+                <div class="wrap form-control">
+                    <input id="city" type="text" readonly />
+                    <div class="city-select-warp"></div>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-cal-default">搜索</button>
+            </form>
+        </div>
+    </div><!-- container -->
+</header>
+
+<!-- ========================================
+			team
+========================================== -->
+<section id="team" class="section team p-b-0 white-bg">
+    <header>
+        <h5>他们正在交友</h5>
+    </header>
+
+    <div class="section-content">
+        <div class="container">
+            <div id="listdiv" class="row">
+                
+            </div><!--/row-->
+        </div>
+    </div>
+
+
+ <script type="text/html" id="cellTableTmpl">
+    <@ for( i = 0 ; i<= cells.length - 1 ; i++){ 
+        var member = cells[i];
+    @>
+        <div class="col-md-3 col-sm-6">
+            <div data-uuid="<@= member._id  @>" class="team-profile member-block" style="background-image: url(member.头像)">
+                <@ if(member.会员级别 != '普通会员'){ @>
+                    <span class="badge base-bg"><@= member.会员级别 @></span>
+                <@ } @>
+                <div class="team-intro text-left">
+                    <p><@= member.昵称 ? member.昵称 : '---' @><a></a></p>
+                    <p>年龄: <@= $.calcage(member.出生年)  @></p>
+                </div>
+            </div>
+        </div>
+    <@ } @>
+</script>
+
+    <header>
+        <div id="pagebar"></div>
+    </header>
+</section> <!-- /.team -->
+   
+
+<% include ./inc/f_footnavi.html%>
+
+<!-- Offcanvas Elements
+============================================= -->
+
+
+<!-- 通用的页面元素和模版 
+============================================= -->
+<% include ./inc/f_sharepage.html %>
+
+<!-- Javascripts
+============================================= -->
+<script src="/assets/lib/components-modernizr/modernizr.js"></script>
+<script src="/assets/lib/jquery/dist/jquery.js"></script>
+<script src="/assets/lib/bootstrap/dist/js/bootstrap.js"></script>
+<script src="/assets/lib/imagesloaded/imagesloaded.pkgd.min.js"></script>
+<script src="/assets/lib/animsition/dist/js/animsition.min.js"></script>
+<script src="/assets/lib/magnific-popup/dist/jquery.magnific-popup.js"></script>
+<script src="/assets/lib/owlcarousel/owl-carousel/owl.carousel.js"></script>
+<script src="/assets/js/plugins.js"></script>
+<script src="/assets/js/main.js"></script>
+
+<link rel="stylesheet" href="/css/jquery.city.style.css">
+<script type="text/javascript" src="/js/jquery.city.js"></script>
+
+<script src="/js/sharepage.base.js"></script>
+<script src="/js/sharepage.js"></script>
+<script src="/js/sharepage.ext.js"></script>
+<script src="/js/commons.js"></script>
+<script src="/js/front/listmember.js"></script>
+
+<% include ./inc/f_foot.html %>

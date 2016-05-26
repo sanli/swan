@@ -1,0 +1,201 @@
+<% include ./inc/f_head.html %>
+<% opt.navi_solide = true %>
+<% include ./inc/f_navi.html %>
+
+
+	<div class="container">
+		<div class="col-md-12">
+<!-- ==============================================
+                Single Product Page
+================================================= -->
+
+<section id="singleProduct" class="section single-product">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-0 col-sm-8 col-sm-offset-2 product-sidebar">
+            	<div class="profile" style="background-image: url(/assets/images/team/chairpersons_4.jpg)">
+            		<%if(viewmember.会员级别 === !'普通会员' ){%>
+            			<span class="badge base-bg"><%=viewmember.会员级别 %></span>
+            		<%}%>
+                </div>
+            </div>
+
+            <div class="col-md-8 col-sm-12">
+                <div class="about-product">
+                    <header>
+                        <h5 class="product-name"><%=viewmember.昵称 %> 
+                        <%if(viewmember.性别 === '男'){%>
+                        	<span class="ion-male" title="男性"></span>
+                        <%}else{%>
+                        	<span class="ion-female" title="女性"></span>
+                        <%}%>
+
+                        <% if(viewmember.QQ){ %> <span class="fa fa-qq"></span> <% } %>
+                        <% if(viewmember.邮箱){ %> <span class="ion-email"></span> <% } %>
+                        <% if(viewmember.电话){ %> <span class="ion-iphone"></span> <% } %>
+                        </h5>
+                        <table class="table table-striped"  style="font-size: 9px;">
+                            	<tr>
+                            		<td>诚信值:</td><td><%='计算中' %></td>
+                            		<td>注册日期:</td><td><%= commons.formatdate( viewmember.ctime ) %></td>
+                            		<td>被浏览量:</td><td><%= viewmember.被浏览量 %></td>
+                            		<td>最近回访:</td><td><%= commons.formatdate( session.lastModified ) %></td>
+                            	</tr>
+                       	</table>
+                    </header>
+                    <div class="row">
+                    	<div class="col-md-6"><p>年龄: <%= commons.calcage(viewmember.出生年) %></p></div>
+                    	<div class="col-md-6"><p>居住地: <%= [ viewmember.所在省, viewmember.所在市, viewmember.所在区].join('') %></p></div>
+                    	<div class="col-md-12"><p>会员: 白银VIP <a id="upgrade-btn" class="label label-success">升级</a></p></div>
+	                    <div class="col-md-12"><p>羽毛: 12 <a id="upgrade-btn" class="label label-success">充值</a> <a id="upgrade-btn" class="label label-danger">邀请送羽毛</a></p></div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+				  <div class="panel-heading">交友宣言</div>
+				  <div id="friendDeclareDiv" class="panel-body">
+				  	<% if(viewmember.交友宣言){ %>
+				    	<%= viewmember.交友宣言 %>
+				    <% } else { %>
+				    	还没填写交友宣言，快编辑宣言吧...
+				    <% } %>
+				  </div>
+				</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+            	<div class="panel panel-default">
+				  <div class="panel-heading">真我相册</div>
+				  <div class="panel-body">
+				    
+				  </div>
+				</div>
+
+				<div class="info-widget">
+			      <ul class="nav nav-tabs" id="buildingNavtab">
+		              <li class="active"><a href="#b1" data-toggle="tab">基本会员管理信息</a></li>
+		          </ul>
+		          <div style="padding: 10px;">
+		            <form id="member-baseinfo-form-ro" class="form-horizontal" role="form">
+		              	<fieldset data-sharepage-macro="formViewFieldSetMacro">
+			              { /* 只读字段 */
+			                fieldset :[
+			                  { name : '性别' , label: '性别', value : '<%=viewmember.性别 %>' }, 
+			                  { name : '身高' , label: '身高', value : '<%=viewmember.身高 %>' }, 
+			                  { name : '出生年月' , label: '出生年月', value : '<%=viewmember.出生年 + '年' +  viewmember.出生月 + '月'%>' }, 
+			                  { name : '最高学历' , label: '最高学历', value : '<%=viewmember.最高学历 %>' }, 
+			                  { name : '婚姻状况' , label: '婚姻状况', value : '<%=viewmember.婚姻状况 %>' }, 
+			                  { name : '从事职业' , label: '从事职业', value : '<%=viewmember.从事职业 %>' }, 
+			                  { name : '年收入' , label: '年收入', value : '<%=viewmember.年收入 %>' }, 
+			                ]
+			              }
+			            </fieldset>
+		            </form>
+		          </div>
+		        </div>
+
+		        <div class="honey-widget">
+			      <ul class="nav nav-tabs" id="buildingNavtab">
+		              <li class="active"><a href="#b1" data-toggle="tab">交友蜜语</a></li>
+		          </ul>
+		          <div style="padding: 10px;">
+		            <form id="member-honey-form-ro" class="form-horizontal" role="form">
+		              	<fieldset data-sharepage-macro="formViewFieldSetMacro">
+			              { /* 只读字段 */
+			                fieldset :[
+			                  { name : '每月花费' , label: '每月花费', type : 'select', 
+			                  	enums : <%- commons.getEnumListJSON("每月花费") %>, 
+			                  	value : '<%=viewmember.每月花费 %>', }, 
+			                  { name : '我要寻找' , label: '我要寻找', type : 'multiselect' , 
+		              			enums : <%- commons.getEnumListJSON("我要寻找") %> ,  
+		              			value : '<%=viewmember.我要寻找 %>' }, 
+			                  { name : '我能提供' , label: '我能提供', type : 'multiselect' , 
+		              			enums : <%- commons.getEnumListJSON("我要寻找") %> ,  
+		              			value : '<%=viewmember.我要寻找 %>'  }, 
+			                  { name : '希望得到' , label: '希望得到', type : 'radio' , 
+		                        enums : <%- commons.getEnumListJSON("我能提供") %> ,  
+		              			value : '<%=viewmember.我能提供 %>'   }, 
+				              { name : '爱情观念' , label: '爱情观念', type : 'multiselect' , 
+				              	enums : <%- commons.getEnumListJSON("爱情观念") %> ,  
+		              			value : '<%=viewmember.爱情观念 %>'  }, 
+				              { name : '外貌' , label: '外貌', type : 'multiselect' , 
+				              	enums : <%- commons.getEnumListJSON("外型") %> ,  
+		              			value : '<%=viewmember.外貌 %>'   }, 
+				              { name : '个性' , label: '个性', type : 'multiselect' , 
+				              	enums : <%- commons.getEnumListJSON("个性") %> ,  
+		              			value : '<%=viewmember.个性 %>'  }, 
+				              { name : '兴趣爱好' , label: '兴趣爱好', type : 'multiselect' , 
+				              	enums : <%- commons.getEnumListJSON("兴趣爱好") %> ,  
+		              			value : '<%=viewmember.兴趣爱好 %>'  }, 
+				              { name : '自我介绍' , label: '自我介绍', type: 'text',  
+		              			value : '<%=viewmember.自我介绍 %>'  }, 
+				              { name : '期望情人' , label: '期望情人', type: 'text',
+				               	value : '<%=viewmember.期望情人 %>'  }, 
+			                ]
+			              }
+			            </fieldset>
+		            </form>
+		          </div>
+		        </div>
+
+		        <div class="contact-widget">
+			      <ul class="nav nav-tabs" id="buildingNavtab">
+		              <li class="active"><a href="#b1" data-toggle="tab">联系资料</a></li>
+		          </ul>
+		          <div style="padding: 10px;">
+		            <form id="member-contact-form-ro" class="form-horizontal" role="form">
+		              	<fieldset data-sharepage-macro="formViewFieldSetMacro">
+			              { /* 只读字段 */
+			                fieldset :[
+			                  { name : '邮箱' , label: '邮箱',  
+		              			value : '<%=viewmember.邮箱 %>'   }, 
+			                  { name : 'QQ' , label: 'QQ',  
+		              			value : '<%=viewmember.QQ %>'   }, 
+			                  { name : '手机' , label: '手机',  
+		              			value : '<%=viewmember.手机 %>'   }, 
+			                  { name : '微信' , label: '微信',  
+		              			value : '<%=viewmember.微信 %>'   }, 
+			                  { name : '其他' , label: '其他',  
+		              			value : '<%=viewmember.其他 %>'   }, 
+			                ]
+			              }
+			            </fieldset>
+		            </form>
+		          </div>
+		        </div>
+            </div>
+<% include ./inc/f_profile_sidebar.html%>
+        </div>
+</section>
+
+		</div>
+	</div>
+<% include ./inc/f_footnavi.html%>
+
+<!-- Offcanvas Elements
+============================================= -->
+
+
+<!-- 通用的页面元素和模版 
+============================================= -->
+<% include ./inc/f_sharepage.html %>
+
+<!-- Javascripts
+============================================= -->
+<script src="/assets/lib/components-modernizr/modernizr.js"></script>
+<script src="/assets/lib/jquery/dist/jquery.js"></script>
+<script src="/assets/lib/bootstrap/dist/js/bootstrap.js"></script>
+<script src="/assets/lib/imagesloaded/imagesloaded.pkgd.min.js"></script>
+<script src="/assets/lib/animsition/dist/js/animsition.min.js"></script>
+<script src="/assets/lib/magnific-popup/dist/jquery.magnific-popup.js"></script>
+<script src="/assets/lib/owlcarousel/owl-carousel/owl.carousel.js"></script>
+<script src="/assets/js/plugins.js"></script>
+<script src="/assets/js/main.js"></script>
+
+<script src="/js/sharepage.base.js"></script>
+<script src="/js/sharepage.js"></script>
+<script src="/js/sharepage.ext.js"></script>
+<script src="/js/commons.js"></script>
+<script src="/js/front/viewprofile.js"></script>
+
+<% include ./inc/f_foot.html %>

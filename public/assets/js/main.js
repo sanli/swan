@@ -253,27 +253,27 @@ $(window).load(function () {
  ===================================*/
 
 
-$('.portfolio-slider, .portfolio-slider-alt').each(function () { // the containers for all your galleries
-    var _items = $(this).find("li > a");
-    var items = [];
-    for (var i = 0; i < _items.length; i++) {
-        items.push({src: $(_items[i]).attr("href"), title: $(_items[i]).attr("title")});
-    }
-    $(this).parent().find(".action-btn").magnificPopup({
-        items: items,
-        type: 'image',
-        gallery: {
-            enabled: true
-        }
-    });
-    $(this).parent().find(".portfolio-description").magnificPopup({
-        items: items,
-        type: 'image',
-        gallery: {
-            enabled: true
-        }
-    });
-});
+// $('.portfolio-slider, .portfolio-slider-alt').each(function () { // the containers for all your galleries
+//     var _items = $(this).find("li > a");
+//     var items = [];
+//     for (var i = 0; i < _items.length; i++) {
+//         items.push({src: $(_items[i]).attr("href"), title: $(_items[i]).attr("title")});
+//     }
+//     $(this).parent().find(".action-btn").magnificPopup({
+//         items: items,
+//         type: 'image',
+//         gallery: {
+//             enabled: true
+//         }
+//     });
+//     $(this).parent().find(".portfolio-description").magnificPopup({
+//         items: items,
+//         type: 'image',
+//         gallery: {
+//             enabled: true
+//         }
+//     });
+// });
 
 
 /*===================================
@@ -281,20 +281,20 @@ $('.portfolio-slider, .portfolio-slider-alt').each(function () { // the containe
  ===================================*/
 
 
-$('.portfolio-gallery').each(function () { // the containers for all your galleries
-    $(this).find(".popup-gallery").magnificPopup({
-        type: 'image',
-        gallery: {
-            enabled: true
-        }
-    });
-    $(this).find(".popup-gallery2").magnificPopup({
-        type: 'image',
-        gallery: {
-            enabled: true
-        }
-    });
-});
+// $('.portfolio-gallery').each(function () { // the containers for all your galleries
+//     $(this).find(".popup-gallery").magnificPopup({
+//         type: 'image',
+//         gallery: {
+//             enabled: true
+//         }
+//     });
+//     $(this).find(".popup-gallery2").magnificPopup({
+//         type: 'image',
+//         gallery: {
+//             enabled: true
+//         }
+//     });
+// });
 
 
 
@@ -303,19 +303,19 @@ $('.portfolio-gallery').each(function () { // the containers for all your galler
  ===================================*/
 
 
-$('.popup-link').magnificPopup({
-    type: 'image'
-});
+// $('.popup-link').magnificPopup({
+//     type: 'image'
+// });
 
 
-$('.popup-video').magnificPopup({
-    disableOn: 700,
-    type: 'iframe',
-    mainClass: 'mfp-fade',
-    removalDelay: 160,
-    preloader: false,
-    fixedContentPos: false
-});
+// $('.popup-video').magnificPopup({
+//     disableOn: 700,
+//     type: 'iframe',
+//     mainClass: 'mfp-fade',
+//     removalDelay: 160,
+//     preloader: false,
+//     fixedContentPos: false
+// });
 
 
 /*===================================
@@ -323,12 +323,12 @@ $('.popup-video').magnificPopup({
  ===================================*/
 
 
- $('.portfolio-filter').on('click', 'a', function () {
-    $('#filters button').removeClass('current');
-    $(this).addClass('current');
-    var filterValue = $(this).attr('data-filter');
-    $(this).parents(".text-center").next().isotope({filter: filterValue});
-});
+//  $('.portfolio-filter').on('click', 'a', function () {
+//     $('#filters button').removeClass('current');
+//     $(this).addClass('current');
+//     var filterValue = $(this).attr('data-filter');
+//     $(this).parents(".text-center").next().isotope({filter: filterValue});
+// });
 
 
 
@@ -336,16 +336,16 @@ $('.popup-video').magnificPopup({
     Section height for parallax image
  ===================================*/
 
- function setSectionHeight(){
-    $('.section-height').each(function(){
-        var h = $(this).closest('.section').height() + 160;
-        $(this).height(h+'px').show();
-    });
-}
-setSectionHeight();
-$(window).on('resize', function(){
-    setSectionHeight();
-});
+//  function setSectionHeight(){
+//     $('.section-height').each(function(){
+//         var h = $(this).closest('.section').height() + 160;
+//         $(this).height(h+'px').show();
+//     });
+// }
+// setSectionHeight();
+// $(window).on('resize', function(){
+//     setSectionHeight();
+// });
 
 
 
@@ -354,70 +354,70 @@ $(window).on('resize', function(){
  ===================================*/
 
 
-/*
- * @author       Rob W (http://stackoverflow.com/a/7513356/938089
- * @description  Executes function on a framed YouTube video (see previous link)
- *               For a full list of possible functions, see:
- *               http://code.google.com/apis/youtube/js_api_reference.html
- * @param String frame_id The id of (the div containing) the frame
- * @param String func     Desired function to call, eg. "playVideo"
- * @param Array  args     (optional) List of arguments to pass to function func*/
- function callPlayer(frame_id, func, args) {
-    if (window.jQuery && frame_id instanceof jQuery) frame_id = frame_id.get(0).id;
-    var iframe = document.getElementById(frame_id);
-    if (iframe && iframe.tagName.toUpperCase() != 'IFRAME') {
-        iframe = iframe.getElementsByTagName('iframe')[0];
-    }
-    if (iframe) {
-        // Frame exists,
-        iframe.contentWindow.postMessage(JSON.stringify({
-            "event": "command",
-            "func": func,
-            "args": args || [],
-            "id": frame_id
-        }), "*");
-    }
-}
+// /*
+//  * @author       Rob W (http://stackoverflow.com/a/7513356/938089
+//  * @description  Executes function on a framed YouTube video (see previous link)
+//  *               For a full list of possible functions, see:
+//  *               http://code.google.com/apis/youtube/js_api_reference.html
+//  * @param String frame_id The id of (the div containing) the frame
+//  * @param String func     Desired function to call, eg. "playVideo"
+//  * @param Array  args     (optional) List of arguments to pass to function func*/
+//  function callPlayer(frame_id, func, args) {
+//     if (window.jQuery && frame_id instanceof jQuery) frame_id = frame_id.get(0).id;
+//     var iframe = document.getElementById(frame_id);
+//     if (iframe && iframe.tagName.toUpperCase() != 'IFRAME') {
+//         iframe = iframe.getElementsByTagName('iframe')[0];
+//     }
+//     if (iframe) {
+//         // Frame exists,
+//         iframe.contentWindow.postMessage(JSON.stringify({
+//             "event": "command",
+//             "func": func,
+//             "args": args || [],
+//             "id": frame_id
+//         }), "*");
+//     }
+// }
 
 
-$(document).ready(function(){
-    $("#playVideoSmall").click(function(e){
-        e.preventDefault();
-        callPlayer("ytPlayerSmall","playVideo");
-        $("#video-small").hide();
-        $("#video-small-container").fadeIn();
-    });
+// $(document).ready(function(){
+//     $("#playVideoSmall").click(function(e){
+//         e.preventDefault();
+//         callPlayer("ytPlayerSmall","playVideo");
+//         $("#video-small").hide();
+//         $("#video-small-container").fadeIn();
+//     });
 
-    $("#playVideo").click(function(e){
-        e.preventDefault();
-        callPlayer("ytPlayer","playVideo");
-        $("#video").hide();
-        $("#video-container").fadeIn();
-    });
+//     $("#playVideo").click(function(e){
+//         e.preventDefault();
+//         callPlayer("ytPlayer","playVideo");
+//         $("#video").hide();
+//         $("#video-container").fadeIn();
+//     });
 
-});
+// });
 
 
 /*===================================
     Progressbar animation
  ===================================*/
 
- $(document).ready(function(){
+//  $(document).ready(function(){
 
-    if($(".progress").length == 0) return;
+//     if($(".progress").length == 0) return;
 
-    $(".progressbars").each(function(){
-        var $this = $(this);
-        var inview = new Waypoint.Inview({
-            element: $this,
-            enter: function (direction) {
-                $this.find(".progress-bar").each(function () {
-                    $(this).css('width', $(this).attr("aria-valuenow") + '%');
-                });
-            }
-        });
-    });
-});
+//     $(".progressbars").each(function(){
+//         var $this = $(this);
+//         var inview = new Waypoint.Inview({
+//             element: $this,
+//             enter: function (direction) {
+//                 $this.find(".progress-bar").each(function () {
+//                     $(this).css('width', $(this).attr("aria-valuenow") + '%');
+//                 });
+//             }
+//         });
+//     });
+// });
 
 
 /*===================================
@@ -687,47 +687,46 @@ $(document).ready(function(){
     Lightbox gallery    
  ===================================*/
 
-$(window).load(function () {
-    imagesLoaded('body', function () {
-        $(".lightbox-gallery").magnificPopup({
-            delegate: 'a',
-            gallery:{
-                enabled:true
-            },
-            type:'image',
-            zoom: {
-                enabled: true,
-                duration: 300, // don't foget to change the duration also in CSS
-                opener: function(element) {
-                    return element.find('img');
-                }
-            }
-        });
-    });
-});
+// $(window).load(function () {
+//     imagesLoaded('body', function () {
+//         $(".lightbox-gallery").magnificPopup({
+//             delegate: 'a',
+//             gallery:{
+//                 enabled:true
+//             },
+//             type:'image',
+//             zoom: {
+//                 enabled: true,
+//                 duration: 300, // don't foget to change the duration also in CSS
+//                 opener: function(element) {
+//                     return element.find('img');
+//                 }
+//             }
+//         });
+//     });
+// });
 
 /*===================================
  Lightbox gallery
  ===================================*/
-
-$(window).load(function () {
-    imagesLoaded('body', function () {
-        $(".popup-gallery").magnificPopup({
-            delegate: 'a',
-            gallery:{
-                enabled:true
-            },
-            type:'image',
-            zoom: {
-                enabled: true,
-                duration: 300, // don't foget to change the duration also in CSS
-                opener: function(element) {
-                    return element.find('img');
-                }
-            }
-        });
-    });
-});
+// $(window).load(function () {
+//     imagesLoaded('body', function () {
+//         $(".popup-gallery").magnificPopup({
+//             delegate: 'a',
+//             gallery:{
+//                 enabled:true
+//             },
+//             type:'image',
+//             zoom: {
+//                 enabled: true,
+//                 duration: 300, // don't foget to change the duration also in CSS
+//                 opener: function(element) {
+//                     return element.find('img');
+//                 }
+//             }
+//         });
+//     });
+// });
 
 
 

@@ -394,6 +394,16 @@ _.each( fieldset, function(field){
     var wcol = 12 / (field.col || 1),
         wlabel = 4, winput = 8;
     var type = field.type || 'input';
+
+    var value_out = field.value;
+    console.log("%s", field.value);
+    if( field.type === 'select' && field.enums ){
+      var enumitem = _.find( field.enums, function(item){ 
+        console.log("%s == %s", item.value , value_out);
+        return item.value == value_out;
+      });
+      value_out = enumitem ? enumitem.label : '';
+    };
 @>
   <@ 
   // 占整格的数据类型
@@ -410,17 +420,9 @@ _.each( fieldset, function(field){
         <div class="col-sm-<@=winput @>">
 
         <@  if(type === 'html'){ @>
-          <div name="<@=field.name @>" class="col-sm-12 well" data-type="html"></div>
-
-        <@ } else if(type === 'select'){ @>
-            <select name="<@=field.name @>" readonly disabled>
-              <option></option>
-              <@ _.each( field.enums, function(dict){ @>
-                <option value=<@=dict.value  @>><@=dict.label  @></option>
-              <@ }) @>
-            </select>
+          <div name="<@=field.name @>" class="col-sm-12 well" data-type="html"><@=value_out  @></div>
         <@ } else { @>
-          <span name="<@=field.name @>"></span>
+          <span name="<@=field.name @>"><@=value_out  @></span>
         <@ } @>
         </div>
     </div>
